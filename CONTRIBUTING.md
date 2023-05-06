@@ -17,7 +17,7 @@ added 208 packages, and audited 371 packages in 2s
 
 found 0 vulnerabilities
 
-up to date, audited 3 packages in 925ms
+up to date, audited 3 packages in 1s
 
 found 0 vulnerabilities
 ```

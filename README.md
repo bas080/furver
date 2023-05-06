@@ -107,7 +107,7 @@ npx c8 npm t -- -R classic --no-cov
 ```
 ```
 
-> furver@0.0.5 test
+> furver@0.0.4 test
 > tap *.test.mjs -R classic --no-cov
 
 client.test.mjs ....................................... 4/5
