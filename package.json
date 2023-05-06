@@ -4,6 +4,10 @@
   "description": "Convert any module into a JSON API in seconds",
   "module": true,
   "main": "index.mjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bas081/furver"
+  },
   "scripts": {
     "test": "tap *.test.mjs",
     "version": "markatzea README.mz > README.md && git add *.mz *.md"
@@ -15,7 +19,10 @@
   "keywords": [
     "module",
     "json",
-    "api"
+    "api",
+    "lisp",
+    "cli",
+    "server"
   ],
   "author": "Bas Huis",
   "license": "ISC",
