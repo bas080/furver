@@ -13,15 +13,7 @@ function tryCatch (tryFn, catchFn) {
   }
 }
 
-export default async function serve(filePaths) {
-  const api = await filePaths.reduce(async (merged, filePath) => {
-    merged = await merged
-    const mod = await import(filePath)
-    const api = mod.default || mod;
-
-    return Object.assign(merged, api)
-  }, {})
-
+export default async function serve(api) {
   const apiEval = exec(deepFreeze(api))
 
   debug('API', Object.keys(api))

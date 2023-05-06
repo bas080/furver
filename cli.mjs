@@ -35,8 +35,15 @@ const argv = yargs(hideBin(process.argv))
     process.env.DEBUG = `*`
   }
 
+  const api = await argv._.reduce(async (merged, filePath) => {
+    merged = await merged
+    const mod = await import(filePath)
+    const api = mod.default || mod;
+
+    return Object.assign(merged, api)
+  }, {})
+
   if (argv.schema) {
-    const { default: api } = await import(process.argv[2])
     console.log(JSON.stringify(schema(api)))
     process.exit()
     return
@@ -44,5 +51,5 @@ const argv = yargs(hideBin(process.argv))
 
   process.env.PORT = argv.port
 
-  await serve(argv._)
+  await serve(api)
 })()
