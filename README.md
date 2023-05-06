@@ -12,13 +12,17 @@ operations in a single request.
 
 ## Usage
 
+To use Furver, simply spin up a server.
+
 ```bash
 npx furver ./example/api.mjs
 ```
 
-Furver includes a client with functions that correspond to those in the module.
-Plus, it handles bulk requests for you, combining sequential calls into
+This command will convert the specified JavaScript module into a JSON web API.
+Furver includes a client with functions that correspond to those in the module,
+and it automatically handles bulk requests, combining sequential calls into
 a single POST request.
+
 
 ```js node
 (async function() {
@@ -36,8 +40,25 @@ a single POST request.
 })()
 ```
 ```
-[ 'hello world', 1683391230589, '0.0.10' ]
+[ 'hello world', 1683392116305, '0.0.10' ]
 ```
+
+
+You can also use the furver command-line interface (CLI) to generate the schema
+for the API.
+
+```bash bash | head -c 80 && echo
+furver --schema ./example/api.mjs
+```
+```
+[["F",0],["T",0],["__",null],["add",2],["addIndex",1],["addIndexRight",1],["adju
+```
+
+This command generates the schema and outputs it to the console. You can also
+pass the schema as an object to the client to avoid fetching it from the
+server.
+
+Here's a list of available options for the furver CLI:
 
 ```bash bash
 furver --help
@@ -52,21 +73,6 @@ Options:
   -p, --port                                          [number] [default: "8999"]
   -s, --schema   Output the API schema without running the server.     [boolean]
 ```
-
-## Schema
-
-For debugging or other reasons it is possible to get the schema using the
-`furver` cli.
-
-```bash bash | head -c 80 && echo
-furver --schema ./example/api.mjs
-```
-```
-[["F",0],["T",0],["__",null],["add",2],["addIndex",1],["addIndexRight",1],["adju
-```
-
-> Generating the schema and passing it as an object to the client removes the
-> need to fetch the schema from the server and readies the client for requests.
 
 ## Security
 
@@ -94,9 +100,9 @@ api(createAndGetInvoice)
   .then(invoice => console.log(invoice))
 ```
 
-Use-cases can be more complex. It might be better to write complex use-cases in
-the js module as a function instead of in the lisp language. This should be
-determined based on your application's needs.
+If your use-case is more complex, it might be better to write it as a function
+in the JavaScript module rather than using the Lisp-like language. This
+decision should be based on your application's needs.
 
 ## Tests
 

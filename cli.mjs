@@ -2,7 +2,6 @@
 
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
-
 import schema from './schema.mjs'
 import serve from './server.mjs'
 
@@ -19,7 +18,7 @@ const argv = yargs(hideBin(process.argv))
   .option('port', {
     alias: 'p',
     type: 'number',
-    default: process.env.PORT || 3000,
+    default: process.env.PORT || 3000
   })
   .option('schema', {
     alias: 's',
@@ -28,28 +27,30 @@ const argv = yargs(hideBin(process.argv))
   })
   .parse()
 
-;(async function () {
+if (argv.verbose) {
+  process.env.DEBUG = '*'
+}
 
-  // FIX THIS
-  if (argv.verbose) {
-    process.env.DEBUG = `*`
-  }
-
-  const api = await argv._.reduce(async (merged, filePath) => {
+async function createApi (modules) {
+  const api = await modules.reduce(async (merged, filePath) => {
     merged = await merged
     const mod = await import(filePath)
-    const api = mod.default || mod;
+    const exported = mod.default || mod
 
-    return Object.assign(merged, api)
+    return { ...merged, ...exported }
   }, {})
+
+  return api
+}
+
+(async function () {
+  const api = await createApi(argv._)
 
   if (argv.schema) {
     console.log(JSON.stringify(schema(api)))
     process.exit()
-    return
   }
 
   process.env.PORT = argv.port
-
   await serve(api)
 })()
