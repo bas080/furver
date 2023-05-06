@@ -1,4 +1,24 @@
-export default async function FurverClient({ method = 'post', endpoint = 'http://localhost:3000', request = fetch }) {
+FurverClient.fetch = function furverClientFetch(url, options) {
+  return fetch(url, {
+    method: 'post',
+    ...options
+  })
+}
+
+FurverClient.schema = async function furverClientSchema(url) {
+  const schemaRes = await fetch(url);
+  return await schemaRes.json();
+};
+
+const isFunction = x => typeof x === 'function'
+
+const castFunction = x => isFunction(x) ? x : () => x
+
+async function FurverClient({
+  endpoint = 'http://localhost:3000',
+  fetch = FurverClient.fetch,
+  schema = FurverClient.schema
+}) {
   const api = {};
   let promise;
   let reqs = [];
@@ -9,8 +29,7 @@ export default async function FurverClient({ method = 'post', endpoint = 'http:/
 
     promise = promise || new Promise((resolve, reject) => {
       setTimeout(() => {
-        request(endpoint, {
-          method,
+        fetch(endpoint, {
           body: JSON.stringify([reqs]),
         })
           .then(async (res) => {
@@ -30,28 +49,29 @@ export default async function FurverClient({ method = 'post', endpoint = 'http:/
       }, 0);
     });
 
-    return promise.then((json) => json[index]);
+    return promise.then((json) => {
+      if (!Array.isArray(json))
+        throw new Error("Response should be an array")
+
+      return json[index];
+    })
   };
 
   const assignMethods = (schema) => {
+    if (!Array.isArray(schema)) {
+      throw new Error('Not a valid schema')
+    }
+
     return schema.reduce((api, [name]) => {
       api[name] = (...args) => bulkFetch([name, ...args]);
       return api;
     }, api);
   };
 
-  const fetchSchema = async () => {
-    try {
-      const schemaRes = await request(`${endpoint}/schema`);
-      const schema = await schemaRes.json();
-      return schema;
-    } catch (error) {
-      console.error('Failed to fetch schema:', error);
-    }
-  };
 
   api.exec = bulkFetch
 
-  const schema = await fetchSchema();
-  return assignMethods(schema);
+  return assignMethods(await castFunction(schema)(`${endpoint}/schema`));
 }
+
+export default FurverClient
