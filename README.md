@@ -36,7 +36,7 @@ console.log(await Promise.all([
 ```node node ./example/client.mjs
 ```
 ```
-[ 'hello world', 1683388611375, '0.0.6' ]
+[ 'hello world', 1683388722267, '0.0.7' ]
 ```
 
 It also automatically performs bulk requests for you. These three function
