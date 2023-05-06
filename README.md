@@ -40,9 +40,8 @@ a single POST request.
 })()
 ```
 ```
-[ 'hello world', 1683406525032, '0.0.17' ]
+[ 'hello world', 1683411641652, '0.0.18' ]
 ```
-
 
 You can also use the furver command-line interface (CLI) to generate the schema
 for the API.
@@ -74,6 +73,38 @@ Options:
   -e, --endpoint                                                        [string]
   -r, --repl      Enable the repl.                                     [boolean]
   -s, --schema    Output the API schema without running the server.    [boolean]
+```
+
+## Reference
+
+
+### `FurverClient(options)`
+
+Creates an instance of the FurverClient API client.
+
+#### Parameters
+
+- `options` (Object): The options for configuring the client.
+  - `endpoint` (string): The URL of the server API. Defaults to `'http://localhost:3000'`.
+  - `fetch` (function): The function to use for making requests. Defaults to `FurverClient.fetch`.
+  - `schema` (function): The function to use for retrieving the server API schema. Defaults to `FurverClient.schema`.
+
+#### Returns
+
+- (Promise<Object>): A promise that resolves to an object representing the API
+  client. The object contains methods for making requests to the server API.
+
+#### Example
+
+```javascript
+import FurverClient from './FurverClient.js'
+
+const client = await FurverClient({
+  endpoint: 'https://example.com/api'
+})
+
+const result = await client.exec(['listUsers'])
+console.log(result)
 ```
 
 ## Security
