@@ -1,5 +1,12 @@
-// TBD: Remove ramda from this lisp.
-import { curryN, hasIn, map } from 'ramda'
+const curryN = (n, fn) => {
+  const arity = n || fn.length
+  return function curried (...args) {
+    if (args.length >= arity) {
+      return fn.call(this, ...args)
+    }
+    return (...newArgs) => curried.call(this, ...args, ...newArgs)
+  }
+}
 
 const isFunction = x => typeof x === 'function'
 
@@ -29,22 +36,22 @@ const exec = curryN(2, async (env, expression) => {
     const letEnv = Object.create(env)
     const [letBindings, letBody] = args
 
-    await Promise.all(map(async ([name, letExpr]) => {
+    await Promise.all(letBindings.map(async ([name, letExpr]) => {
       letEnv[name] = await exec(letEnv, letExpr)
-    }, letBindings))
+    }))
 
     return exec(letEnv, letBody)
   }
 
   // Throw error if operator is not in env.
-  if (!hasIn(operator, env)) {
+  if (!(operator in env)) {
     throw new Error(`Unknown expression: ${operator}`)
   }
 
   const fn = castFunction(env[operator])
 
   try {
-    return await fn(...(await Promise.all(map(exec(env), args))))
+    return await fn(...(await Promise.all(args.map(exec(env)))))
   } catch (error) {
     console.error('ferver:error ', expression)
     throw error
