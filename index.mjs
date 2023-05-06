@@ -1,3 +1,4 @@
+// TBD: Remove ramda from this lisp.
 import { curryN, hasIn, map } from 'ramda'
 
 class CrispError extends Error {}

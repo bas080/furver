@@ -150,7 +150,7 @@ npx c8 npm t -- -R classic --no-cov
 ```
 ```
 
-> furver@0.0.0 test
+> furver@0.0.1 test
 > tap *.test.mjs -R classic --no-cov
 
 client.test.mjs ....................................... 4/5
@@ -161,7 +161,7 @@ index.test.mjs ...................................... 10/10
 server.test.mjs ....................................... 4/4
 total ............................................... 18/19
 
-  18 passing (428.145ms)
+  18 passing (427.903ms)
   1 pending
 ------------|---------|----------|---------|---------|-------------------
 File        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 

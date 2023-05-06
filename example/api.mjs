@@ -1,4 +1,4 @@
-import ramda from 'ramda'
+import * as ramda from 'ramda'
 import lips from '@jcubic/lips'
 
 import _package from '../package.json' assert {
