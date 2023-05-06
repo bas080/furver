@@ -5,19 +5,19 @@
 First clone the project and then run `npm link`.
 
 ```bash bash
-npm ci
+npm install
 npm link
 ```
 ```
 
-added 208 packages, and audited 371 packages in 3s
+up to date, audited 371 packages in 1s
 
 31 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
 
-up to date, audited 3 packages in 1s
+up to date, audited 3 packages in 954ms
 
 found 0 vulnerabilities
 ```

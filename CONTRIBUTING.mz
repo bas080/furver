@@ -5,7 +5,7 @@
 First clone the project and then run `npm link`.
 
 ```bash bash
-npm ci
+npm install
 npm link
 ```
 
