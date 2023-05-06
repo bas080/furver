@@ -13,7 +13,7 @@ function tryCatch (tryFn, catchFn) {
   }
 }
 
-export default async function serve(api) {
+export default async function serve (api) {
   const apiEval = exec(deepFreeze(api))
 
   debug('API', Object.keys(api))

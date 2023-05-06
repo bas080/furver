@@ -1,24 +1,23 @@
 import * as ramda from 'ramda'
 import lips from '@jcubic/lips'
+import { readFileSync } from 'node:fs'
 
-import _package from '../package.json' assert {
-  type: 'json'
-}
+const _package = JSON.parse(readFileSync('./package.json').toString())
 
 const api = {
   ...ramda,
-  version() {
+  version () {
     return _package.version
   },
-  timestamp() {
+  timestamp () {
     return Date.now()
   },
-  async lips(string) {
+  async lips (string) {
     const results = await lips.exec(string)
     return results.valueOf()
   },
   cannotMutate: 'initial value',
-  mutate() {
+  mutate () {
     // Because of freeze this is not allowed.
     api.cannotMutate = 'otherValue'
   }

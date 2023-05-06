@@ -3,7 +3,7 @@ import { curryN, hasIn, map } from 'ramda'
 
 const isFunction = x => typeof x === 'function'
 
-function castFunction(x) {
+function castFunction (x) {
   return isFunction(x) ? x : () => x
 }
 

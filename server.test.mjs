@@ -1,66 +1,66 @@
-import tap from 'tap';
-import { spawn } from 'node:child_process';
+import tap from 'tap'
+import { spawn } from 'node:child_process'
 
-const { test } = tap;
+const { test } = tap
 
-let serverProcess;
+let serverProcess
 
 tap.before(async () => {
   // Start the server in a child process
-  serverProcess = spawn('node', ['./cli.mjs', './example/api.mjs']);
+  serverProcess = spawn('node', ['./cli.mjs', './example/api.mjs'])
 
   // Wait for the server to start listening on the port
-  await new Promise((resolve) => serverProcess.stderr.once('data', resolve));
-});
+  await new Promise((resolve) => serverProcess.stderr.once('data', resolve))
+})
 
-tap.teardown(() => serverProcess.kill());
+tap.teardown(() => serverProcess.kill())
 
-const port = 3000;
-const apiUri = `http://localhost:${port}`;
+const port = 3000
+const apiUri = `http://localhost:${port}`
 
 test('Returns 400 when receiving malformed JSON data', async (t) => {
   // Send a POST request with malformed JSON data
   const res = await fetch(apiUri, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: '{invalid-json}',
-  });
+    body: '{invalid-json}'
+  })
 
   // Verify the response status code
-  t.equal(res.status, 400);
+  t.equal(res.status, 400)
 
   // Stop the server
-});
+})
 
 test('Returns 500 status', async (t) => {
   try {
     const res = await fetch(apiUri, {
       method: 'POST',
       body: JSON.stringify([]),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    t.equal(res.status, 500, 'Status should be 500');
-    t.end();
+      headers: { 'Content-Type': 'application/json' }
+    })
+    t.equal(res.status, 500, 'Status should be 500')
+    t.end()
   } catch (error) {
-    t.error(error);
+    t.error(error)
   }
-});
+})
 
 test('Test 200 status', async (t) => {
-  const requestData = [[['add', 1, 2]]];
-  const expectedResponse = [3];
+  const requestData = [[['add', 1, 2]]]
+  const expectedResponse = [3]
 
   // Send a POST request with valid JSON data
   const res = await fetch(apiUri, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestData),
-  });
+    body: JSON.stringify(requestData)
+  })
 
   // Verify the response status code
-  t.equal(res.status, 200);
+  t.equal(res.status, 200)
 
   // Verify the response body
-  const responseBody = await res.json();
-  t.same(responseBody, expectedResponse);
-});
+  const responseBody = await res.json()
+  t.same(responseBody, expectedResponse)
+})

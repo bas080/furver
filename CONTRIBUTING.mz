@@ -11,6 +11,11 @@ npm link
 
 You should now be able to run the bin scripts.
 
+## Formatting
+
+```bash bash
+npx standard
+```
 
 ## Documentation
 
