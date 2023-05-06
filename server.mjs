@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import http from 'node:http'
-import evaluateMultiple from './index.mjs'
+import { exec } from './lisp.mjs'
 import Debug from 'debug'
 import schema from './schema.mjs'
 
@@ -11,7 +11,7 @@ const debug = Debug('furver')
 
 const { default: api } = await import(process.argv[2])
 
-const apiEval = evaluateMultiple(deepFreeze(api))
+const apiEval = exec(deepFreeze(api))
 
 debug('API', Object.keys(api))
 

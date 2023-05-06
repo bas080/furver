@@ -1,15 +1,13 @@
 // TBD: Remove ramda from this lisp.
 import { curryN, hasIn, map } from 'ramda'
 
-class CrispError extends Error {}
-
 const isFunction = x => typeof x === 'function'
 
 function castFunction(x) {
   return isFunction(x) ? x : () => x
 }
 
-const crispEval = curryN(2, async (env, expression) => {
+const exec = curryN(2, async (env, expression) => {
   if (!Array.isArray(expression)) {
     return expression
   }
@@ -18,13 +16,13 @@ const crispEval = curryN(2, async (env, expression) => {
 
   // If operator is an array, return its JSON value.
   if (Array.isArray(operator)) {
-    return Promise.all(operator.map(crispEval(env)))
+    return Promise.all(operator.map(exec(env)))
   }
 
   if (operator === 'fn') {
     const [body] = args
 
-    return (fnEnv) => crispEval(Object.assign(Object.create(env), fnEnv), body)
+    return (fnEnv) => exec(Object.assign(Object.create(env), fnEnv), body)
   }
 
   if (operator === 'let') {
@@ -32,25 +30,25 @@ const crispEval = curryN(2, async (env, expression) => {
     const [letBindings, letBody] = args
 
     await Promise.all(map(async ([name, letExpr]) => {
-      letEnv[name] = await crispEval(letEnv, letExpr)
+      letEnv[name] = await exec(letEnv, letExpr)
     }, letBindings))
 
-    return crispEval(letEnv, letBody)
+    return exec(letEnv, letBody)
   }
 
   // Throw error if operator is not in env.
   if (!hasIn(operator, env)) {
-    throw new CrispError(`Unknown expression: ${operator}`)
+    throw new Error(`Unknown expression: ${operator}`)
   }
 
   const fn = castFunction(env[operator])
 
   try {
-    return await fn(...(await Promise.all(map(crispEval(env), args))))
+    return await fn(...(await Promise.all(map(exec(env), args))))
   } catch (error) {
-    console.error('crisp:error ', expression)
+    console.error('ferver:error ', expression)
     throw error
   }
 })
 
-export default crispEval
+export { exec }
