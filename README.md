@@ -41,7 +41,7 @@ furver-schema ./example/api.mjs | head -c 80
 echo -e '\n'
 ```
 ```
-[["F",0],["T",0],["__",null],["add",2],["addIndex",1],["adjust",3],["all",2],["a
+[["F",0],["T",0],["__",null],["add",2],["addIndex",1],["addIndexRight",1],["adju
 
 ```
 
@@ -60,7 +60,7 @@ const [timestamp, version] = await Promise.all([
   myApi.timestamp()
   myApi.version()
 ])
-
+```
 
 These separate calls will be done in **a single POST request**. Make sure you
 understand your promises in order to get these benefits. The following will not
@@ -150,24 +150,29 @@ npx c8 npm t -- -R classic --no-cov
 ```
 ```
 
-> furver@0.0.1 test
+> furver@0.0.2 test
 > tap *.test.mjs -R classic --no-cov
 
 client.test.mjs ....................................... 4/5
   Skipped: 1
     handles errors when fetching schema
 
-index.test.mjs ...................................... 10/10
+lisp.test.mjs ....................................... 10/10
 server.test.mjs ....................................... 4/4
 total ............................................... 18/19
 
-  18 passing (427.903ms)
+  18 passing (552.824ms)
   1 pending
-------------|---------|----------|---------|---------|-------------------
-File        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
-------------|---------|----------|---------|---------|-------------------
-All files   |   92.85 |    91.17 |     100 |   92.85 |                   
- client.mjs |   91.22 |    85.71 |     100 |   91.22 | 18-19,24,49-50    
- index.mjs  |   94.54 |       95 |     100 |   94.54 | 50-52             
-------------|---------|----------|---------|---------|-------------------
+----------------|---------|----------|---------|---------|-------------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s       
+----------------|---------|----------|---------|---------|-------------------------
+All files       |   68.16 |    91.48 |    62.5 |   68.16 |                         
+ furver         |   67.43 |     91.3 |   83.33 |   67.43 |                         
+  client.mjs    |   91.22 |    85.71 |     100 |   91.22 | 18-19,24,49-50          
+  lisp.mjs      |   94.44 |       95 |     100 |   94.44 | 49-51                   
+  schema.mjs    |   14.28 |      100 |       0 |   14.28 | 2-7                     
+  server.mjs    |      43 |     90.9 |   66.66 |      43 | 18-24,27-72,77-78,88-89 
+ furver/example |   74.07 |      100 |       0 |   74.07 |                         
+  api.mjs       |   74.07 |      100 |       0 |   74.07 | 11,14,17-18,22-24       
+----------------|---------|----------|---------|---------|-------------------------
 ```
