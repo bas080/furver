@@ -10,20 +10,25 @@ npm link
 ```
 ```
 
-up to date, audited 371 packages in 2s
+up to date, audited 371 packages in 1s
 
 31 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
 
-up to date, audited 3 packages in 894ms
+up to date, audited 3 packages in 906ms
 
 found 0 vulnerabilities
 ```
 
 You should now be able to run the bin scripts.
 
+## Formatting
+
+```bash bash
+npx standard
+```
 
 ## Documentation
 
