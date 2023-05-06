@@ -6,15 +6,14 @@
   "main": "index.mjs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bas081/furver"
+    "url": "git@github.com:bas081/furver.git"
   },
   "scripts": {
     "test": "tap *.test.mjs",
     "version": "markatzea CONTRIBUTING.mz > CONTRIBUTING.md && git add *.md"
   },
   "bin": {
-    "furver-server": "./server.mjs",
-    "furver-schema": "./schema-cli.mjs"
+    "furver": "./cli.mjs"
   },
   "keywords": [
     "module",
@@ -31,6 +30,7 @@
     "tap": "^16.3.4"
   },
   "dependencies": {
-    "ramda": "^0.29.0"
+    "ramda": "^0.29.0",
+    "yargs": "^17.7.2"
   }
 }

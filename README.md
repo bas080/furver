@@ -1,30 +1,54 @@
 # Furver
 
-Convert any module into a JSON web api in *seconds*.
+Furver is a tool that allows you to convert any JavaScript module into a JSON
+web API in seconds, without requiring you to set up complex routing and
+response handling. With Furver, you can simply add an HTTP server and route
+requests to your module's functions, or use a pre-built client to access the
+API from within your Node.js or browser code. Furver also includes a simple
+Lisp-like language that allows you to perform complex aggregations and
+operations in a single request.
 
-## Reasoning
 
-Developing and designing a JSON api can take more time then one might have.
-What if the js module itself is the API? This is what Furver does.
 
-## Server
+## Usage
 
-`PORT=3000 furver-server ./example/api.mjs`
-
-Yes it is that simple. With great convenience comes great joy.
-
-You can now perform requests to `http://localhost:3000`.
-
-```js
-fetch('http://localhost:3000', {
-  method: 'post',
-  body: JSON.stringify([['version']])
-})
-  .then(res => res.json())
-  .then(console.log)
+```bash
+npx furver ./example/api.mjs --port=4040
 ```
 
-See the [client](#Client) section for a nicer way to consume this API.
+And it comes with a client that has functions that directly map to the
+functions in the provided module.
+
+```js cat ./example/client.mjs && node ./example/client.mjs
+```
+```
+import FurverClient from '../client.mjs'
+
+const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
+
+await Promise.all([
+  api.identity('hello world'),
+  api.timestamp(),
+  api.version()
+])
+```
+
+It also automatically performs bulk requests for you. These three function
+calls result in a single POST request.
+
+```bash bash
+furver --help
+```
+```
+Usage: furver [...modules] [options]
+
+Options:
+      --help     Show help                                             [boolean]
+      --version  Show version number                                   [boolean]
+  -v, --verbose                                                        [boolean]
+  -p, --port                                          [number] [default: "8999"]
+  -s, --schema   Output the API schema without running the server.     [boolean]
+```
 
 ## HTTP Frameworks
 
@@ -35,76 +59,28 @@ framework. If not, it should be trivial to implement.
 
 ## Schema
 
-```bash bash
-# Using head to reduce the amount printed.
-furver-schema ./example/api.mjs | head -c 80
-echo -e '\n'
+For debugging or other reasons it is possible to get the schema using the
+`furver` cli.
+
+```bash bash | head -c 80 && echo
+furver --schema ./example/api.mjs
 ```
 ```
-[["F",0],["T",0],["__",null],["add",2],["addIndex",1],["addIndexRight",1],["adju
 
-```
-
-## Client
-
-Furver comes with a totally optional javascript client that needs to be pointed
-to a running furver server. This will fetch the schema and create the available
-functions.
-
-```javascript
-import FurverClient from 'furver/client.mjs'
-
-const myApi = await FurverClient({endpoint: 'http://localhost:3000'})
-
-const [timestamp, version] = await Promise.all([
-  myApi.timestamp()
-  myApi.version()
-])
-```
-
-These separate calls will be done in **a single POST request**. Make sure you
-understand your promises in order to get these benefits. The following will not
-perform these operations in a single request.
-
-```js
-await api.version()
-await api.timestamp()
-```
-
-The client also offers the `.exec()` method. This can be overwritten in the
-module. It takes valid Furver lisp.
-
-```js
-await api.exec(['version']) // Responds with the package.json version.
 ```
 
 ## Security
 
-Furver, just like any other tool, is not secure as is. It is a flexible tool
-that allows you to do what you want to do and therefore also allows you to
-shoot yourself in the foot.
+Furver provides a "deep freeze" mechanism to prevent the object exported by the
+module from being mutated. However, developers should be aware that Furver is
+a flexible tool and they must ensure that their code is secure.
 
-It does try to completely "deep freeze" the object the module exports. This is
-to prevent outsiders from mutating the api in whatever manner. This is not
-a guarantee that outsiders can't mutate the environment.
 
-If you wish to enforce certain permissions, you would need to write or wrap the
-functions in that module to do so.
+## Advanced Usage
 
-## Advanced (optional)
-
-Furver comes with a bare-bones lisp like language built on top of JSON. This
-makes for an easy to serialize and parse programming language that supports
-more complicated use-cases. The language has the builtin operators `let` and
-`fn` and loads in the provided module as the environment.
-
-This allows one to perform complete aggregations server side with a single
-request.
-
-Imagine we have a use-case where a user can create an invoice. On success the
-user is shown the details page of that invoice. A normal JSON api requires
-a POST and then a GET to be performed. Furver's lisp allows you to do this in
-a single POST request.
+Furver's Lisp-like language allows developers to perform complex aggregations
+and operations in a single request. For example, to create and get an invoice
+in a single request:
 
 ```javascript
 import Api from 'furver/client.mjs'
@@ -119,25 +95,9 @@ api(createAndGetInvoice)
   .then(invoice => console.log(invoice))
 ```
 
-The newly created invoice id is only known on the server. By telling the server
-you want that value to be passed to the `invoiceById` function, we can now
-cover our use-case with a single request.
-
 Use-cases can be more complex. It might be better to write complex use-cases in
 the js module as a function instead of in the lisp language. This should be
 determined based on your application's needs.
-
-### I want a better lisp
-
-Furver offers a very simple lisp. It does not intend to expand the lisp (much
-further). Instead, it can play nice with existing js lisp implementations. You
-can simply add your desired lisp exec function to the module and delegate the
-lisp code to it. See the ./example/api.mjs that adds `lips` as a method.
-
-```node
-> await a.lips('(+ 1 2) (- 2 1)')
-[ '3', '1' ]
-```
 
 ## Tests
 
@@ -147,7 +107,7 @@ npx c8 npm t -- -R classic --no-cov
 ```
 ```
 
-> furver@0.0.3 test
+> furver@0.0.5 test
 > tap *.test.mjs -R classic --no-cov
 
 client.test.mjs ....................................... 4/5
@@ -155,21 +115,127 @@ client.test.mjs ....................................... 4/5
     handles errors when fetching schema
 
 lisp.test.mjs ....................................... 10/10
-server.test.mjs ....................................... 4/4
-total ............................................... 18/19
+server.test.mjs ....................................... 0/3
+  Returns 400 when receiving malformed JSON data
+  not ok fetch failed
+    stack: |
+      Test.<anonymous> (file://server.test.mjs:23:15)
+    at:
+      line: 11522
+      column: 11
+      file: node:internal/deps/undici/undici
+      function: Object.fetch
+    type: TypeError
+    cause:
+      !error
+      name: Error
+      message: connect ECONNREFUSED 127.0.0.1:3000
+      stack: |-
+        Error: connect ECONNREFUSED 127.0.0.1:3000
+            at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1571:16)
+      errno: -111
+      code: ECONNREFUSED
+      syscall: connect
+      address: 127.0.0.1
+      port: 3000
+    tapCaught: returnedPromiseRejection
+    test: Returns 400 when receiving malformed JSON data
+  
+  Returns 500 status
+  not ok fetch failed
+    origin:
+      at:
+        line: 11522
+        column: 11
+        file: node:internal/deps/undici/undici
+        function: Object.fetch
+      stack: |
+        Test.<anonymous> (file://server.test.mjs:37:17)
+      type: TypeError
+      cause:
+        !error
+        name: Error
+        message: connect ECONNREFUSED 127.0.0.1:3000
+        stack: |-
+          Error: connect ECONNREFUSED 127.0.0.1:3000
+              at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1571:16)
+        errno: -111
+        code: ECONNREFUSED
+        syscall: connect
+        address: 127.0.0.1
+        port: 3000
+    found:
+      !error
+      name: TypeError
+      message: fetch failed
+      stack: >-
+        TypeError: 
+            at Object.fetch (node:internal/deps/undici/undici:11522:11)
+            at processTicksAndRejections (node:internal/process/task_queues:95:5)
+            at Test.<anonymous> (file:///home/ant/projects/furver/server.test.mjs:37:17)
+      cause:
+        name: Error
+        message: connect ECONNREFUSED 127.0.0.1:3000
+        stack: |-
+          Error: connect ECONNREFUSED 127.0.0.1:3000
+              at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1571:16)
+        errno: -111
+        code: ECONNREFUSED
+        syscall: connect
+        address: 127.0.0.1
+        port: 3000
+    at:
+      line: 45
+      column: 7
+      file: file:///home/ant/projects/furver/server.test.mjs
+      type: Test
+    stack: |
+      Test.<anonymous> (file://server.test.mjs:45:7)
+  
+  Test 200 status
+  not ok fetch failed
+    stack: |
+      Test.<anonymous> (file://server.test.mjs:54:15)
+    at:
+      line: 11522
+      column: 11
+      file: node:internal/deps/undici/undici
+      function: Object.fetch
+    type: TypeError
+    cause:
+      !error
+      name: Error
+      message: connect ECONNREFUSED 127.0.0.1:3000
+      stack: |-
+        Error: connect ECONNREFUSED 127.0.0.1:3000
+            at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1571:16)
+      errno: -111
+      code: ECONNREFUSED
+      syscall: connect
+      address: 127.0.0.1
+      port: 3000
+    tapCaught: returnedPromiseRejection
+    test: Test 200 status
 
-  18 passing (582.123ms)
+total ............................................... 14/18
+  
+
+  14 passing (30s)
   1 pending
-----------------|---------|----------|---------|---------|-------------------------
-File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s       
-----------------|---------|----------|---------|---------|-------------------------
-All files       |   68.16 |    91.48 |    62.5 |   68.16 |                         
- furver         |   67.43 |     91.3 |   83.33 |   67.43 |                         
-  client.mjs    |   91.22 |    85.71 |     100 |   91.22 | 18-19,24,49-50          
-  lisp.mjs      |   94.44 |       95 |     100 |   94.44 | 49-51                   
-  schema.mjs    |   14.28 |      100 |       0 |   14.28 | 2-7                     
-  server.mjs    |      43 |     90.9 |   66.66 |      43 | 18-24,27-72,77-78,88-89 
- furver/example |   74.07 |      100 |       0 |   74.07 |                         
-  api.mjs       |   74.07 |      100 |       0 |   74.07 | 11,14,17-18,22-24       
-----------------|---------|----------|---------|---------|-------------------------
+  3 failing
+
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------|---------|----------|---------|---------|-------------------
+All files       |   71.86 |    85.45 |    64.7 |   71.86 |                   
+ furver         |   71.64 |    85.18 |   84.61 |   71.64 |                   
+  cli.mjs       |   85.41 |       40 |     100 |   85.41 | 35-36,39-43       
+  client.mjs    |   91.22 |    85.71 |     100 |   91.22 | 18-19,24,49-50    
+  lisp.mjs      |   94.44 |       95 |     100 |   94.44 | 49-51             
+  schema.mjs    |   14.28 |      100 |       0 |   14.28 | 2-7               
+  server.mjs    |   46.07 |    85.71 |      75 |   46.07 | 8-14,30-75,90-91  
+ furver/example |   74.07 |      100 |       0 |   74.07 |                   
+  api.mjs       |   74.07 |      100 |       0 |   74.07 | 11,14,17-18,22-24 
+----------------|---------|----------|---------|---------|-------------------
 ```
+bash -eo pipefail exited with code 1

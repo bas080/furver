@@ -7,7 +7,7 @@ let serverProcess;
 
 tap.before(async () => {
   // Start the server in a child process
-  serverProcess = spawn('node', ['./server.mjs', './example/api.mjs']);
+  serverProcess = spawn('node', ['./cli.mjs', './example/api.mjs']);
 
   // Wait for the server to start listening on the port
   await new Promise((resolve) => serverProcess.stderr.once('data', resolve));
