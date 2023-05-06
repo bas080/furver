@@ -13,34 +13,31 @@ operations in a single request.
 ## Usage
 
 ```bash
-npx furver ./example/api.mjs --port=4040
+npx furver ./example/api.mjs
 ```
 
-And it comes with a client that has functions that directly map to the
-functions in the provided module.
+Furver includes a client with functions that correspond to those in the module.
+Plus, it handles bulk requests for you, combining sequential calls into
+a single POST request.
 
-```js cat ./example/client.mjs
-```
-```
-import FurverClient from '../client.mjs'
+```js node
+(async function() {
 
-const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
+  const { default: FurverClient } = await import('./client.mjs')
 
-console.log(await Promise.all([
-  api.identity('hello world'),
-  api.timestamp(),
-  api.version()
-]))
-```
+  const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
 
-```node node ./example/client.mjs
-```
-```
-[ 'hello world', 1683389921710, '0.0.9' ]
-```
+  console.log(await Promise.all([
+    api.identity('hello world'),
+    api.timestamp(),
+    api.version()
+  ]))
 
-It also automatically performs bulk requests for you. These three function
-calls result in a single POST request.
+})()
+```
+```
+[ 'hello world', 1683391230589, '0.0.10' ]
+```
 
 ```bash bash
 furver --help
@@ -56,13 +53,6 @@ Options:
   -s, --schema   Output the API schema without running the server.     [boolean]
 ```
 
-## HTTP Frameworks
-
-You might be using a (popular) HTTP framework. Furver should support your
-framework. If not, it should be trivial to implement.
-
-> Open for **contributors**.
-
 ## Schema
 
 For debugging or other reasons it is possible to get the schema using the
@@ -74,6 +64,9 @@ furver --schema ./example/api.mjs
 ```
 [["F",0],["T",0],["__",null],["add",2],["addIndex",1],["addIndexRight",1],["adju
 ```
+
+> Generating the schema and passing it as an object to the client removes the
+> need to fetch the schema from the server and readies the client for requests.
 
 ## Security
 
