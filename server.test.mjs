@@ -15,7 +15,7 @@ tap.before(async () => {
 
 tap.teardown(() => serverProcess.kill())
 
-const port = 3000
+const port = process.env.PORT
 const apiUri = `http://localhost:${port}`
 
 test('Returns 400 when receiving malformed JSON data', async (t) => {

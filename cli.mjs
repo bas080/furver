@@ -5,6 +5,7 @@ import { hideBin } from 'yargs/helpers'
 import schema from './schema.mjs'
 import serve from './server.mjs'
 import path from 'node:path'
+import Debug from 'debug'
 
 const name = 'furver'
 process.title = name
@@ -36,6 +37,8 @@ const argv = yargs(hideBin(process.argv))
     description: 'Output the API schema without running the server.'
   })
   .parse()
+
+const debug = Debug(name)
 
 if (argv.verbose) {
   process.env.DEBUG = '*'
@@ -74,12 +77,16 @@ async function createApi (modules) {
     const FurverClient = await import('./client.mjs')
     const api = await FurverClient.default({ endpoint: argv.endpoint })
 
+    debug('Repl', argv.endpoint)
+
     repl.default(api.exec)
   }
 
   if (argv.repl) {
     const repl = await import('./repl.mjs')
     const { exec } = await import('./lisp.mjs')
+
+    debug('Repl', 'process')
 
     repl.default(exec(api))
   }
