@@ -1,6 +1,6 @@
 {
   "name": "furver",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Convert any module into a JSON API in seconds",
   "module": true,
   "main": "index.mjs",
