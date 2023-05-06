@@ -56,7 +56,7 @@ const [timestamp, version] = await Promise.all([
   myApi.timestamp()
   myApi.version()
 ])
-
+```
 
 These separate calls will be done in **a single POST request**. Make sure you
 understand your promises in order to get these benefits. The following will not
