@@ -19,18 +19,24 @@ npx furver ./example/api.mjs --port=4040
 And it comes with a client that has functions that directly map to the
 functions in the provided module.
 
-```js cat ./example/client.mjs && node ./example/client.mjs
+```js cat ./example/client.mjs
 ```
 ```
 import FurverClient from '../client.mjs'
 
 const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
 
-await Promise.all([
+console.log(await Promise.all([
   api.identity('hello world'),
   api.timestamp(),
   api.version()
-])
+]))
+```
+
+```node node ./example/client.mjs
+```
+```
+[ 'hello world', 1683388611375, '0.0.6' ]
 ```
 
 It also automatically performs bulk requests for you. These three function
