@@ -10,14 +10,14 @@ npm link
 ```
 ```
 
-added 208 packages, and audited 371 packages in 2s
+added 208 packages, and audited 371 packages in 3s
 
 31 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
 
-up to date, audited 3 packages in 922ms
+up to date, audited 3 packages in 1s
 
 found 0 vulnerabilities
 ```
