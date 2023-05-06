@@ -4,6 +4,7 @@ import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import schema from './schema.mjs'
 import serve from './server.mjs'
+import path from 'node:path'
 
 const name = 'furver'
 process.title = name
@@ -34,6 +35,8 @@ if (argv.verbose) {
 async function createApi (modules) {
   const api = await modules.reduce(async (merged, filePath) => {
     merged = await merged
+    if (filePath.startsWith('.')) { filePath = path.join(process.cwd(), filePath) }
+
     const mod = await import(filePath)
     const exported = mod.default || mod
 
