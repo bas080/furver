@@ -17,7 +17,7 @@ up to date, audited 371 packages in 1s
 
 found 0 vulnerabilities
 
-up to date, audited 3 packages in 873ms
+up to date, audited 3 packages in 893ms
 
 found 0 vulnerabilities
 ```

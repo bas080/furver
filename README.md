@@ -40,7 +40,7 @@ a single POST request.
 })()
 ```
 ```
-[ 'hello world', 1683401026536, '0.0.15' ]
+[ 'hello world', 1683405610133, '0.0.16' ]
 ```
 
 
@@ -67,11 +67,13 @@ furver --help
 Usage: furver [...modules] [options]
 
 Options:
-      --help     Show help                                             [boolean]
-      --version  Show version number                                   [boolean]
+      --help      Show help                                            [boolean]
+      --version   Show version number                                  [boolean]
   -v, --verbose                                                        [boolean]
   -p, --port                                          [number] [default: "8999"]
-  -s, --schema   Output the API schema without running the server.     [boolean]
+  -e, --endpoint                                                        [string]
+  -r, --repl      Enable the repl.                                     [boolean]
+  -s, --schema    Output the API schema without running the server.    [boolean]
 ```
 
 ## Security
@@ -80,6 +82,42 @@ Furver provides a "deep freeze" mechanism to prevent the object exported by the
 module from being mutated. However, developers should be aware that Furver is
 a flexible tool and they must ensure that their code is secure.
 
+
+## REPL
+
+Furver includes a simple REPL (Read-Eval-Print Loop) that allows you to
+interact with the API from the command line. To start the REPL, run the
+following command:
+
+```bash
+npx furver ./example/api.mjs --repl
+```
+
+This will start the API server and a REPL prompt. You can then enter JSON
+requests at the prompt and receive the responses.
+
+For example, to call the identity function with the argument "hello world", you
+would enter the following:
+
+```json
+["identity", "hello world"]
+```
+
+The REPL will parse the input as JSON, pass it to the lisp exec function, and
+print the response to the console.
+
+## REPL (remote)
+
+To use the REPL with a remote Furver server, you need to specify the --endpoint
+option when starting the Furver server.
+
+For example, to connect to a remote Furver server running on http://localhost:3000:
+
+```bash
+npx furver --endpoint http://localhost:3000
+```
+
+You can exit the REPL by typing **Ctrl+C** or **Ctrl+D**.
 
 ## Advanced Usage
 
