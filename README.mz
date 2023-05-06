@@ -138,9 +138,6 @@ lisp code to it. See the ./example/api.mjs that adds `lips` as a method.
 ## Tests
 
 ```bash bash -eo pipefail
-# Clean install dependencies.
-npm ci &> /dev/null
-
 # Run tests and generate a coverage report
 npx c8 npm t -- -R classic --no-cov
 ```

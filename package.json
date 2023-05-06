@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "tap *.test.mjs",
-    "version": "markatzea README.mz > README.md && git add *.mz *.md"
+    "version": "markatzea CONTRIBUTING.mz > CONTRIBUTING.md && git add *.md"
   },
   "bin": {
     "furver-server": "./server.mjs",
