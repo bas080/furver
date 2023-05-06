@@ -142,15 +142,12 @@ lisp code to it. See the ./example/api.mjs that adds `lips` as a method.
 ## Tests
 
 ```bash bash -eo pipefail
-# Clean install dependencies.
-npm ci &> /dev/null
-
 # Run tests and generate a coverage report
 npx c8 npm t -- -R classic --no-cov
 ```
 ```
 
-> furver@0.0.2 test
+> furver@0.0.3 test
 > tap *.test.mjs -R classic --no-cov
 
 client.test.mjs ....................................... 4/5
@@ -161,7 +158,7 @@ lisp.test.mjs ....................................... 10/10
 server.test.mjs ....................................... 4/4
 total ............................................... 18/19
 
-  18 passing (552.824ms)
+  18 passing (582.123ms)
   1 pending
 ----------------|---------|----------|---------|---------|-------------------------
 File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s       
