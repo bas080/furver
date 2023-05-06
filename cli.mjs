@@ -21,6 +21,15 @@ const argv = yargs(hideBin(process.argv))
     type: 'number',
     default: process.env.PORT || 3000
   })
+  .option('endpoint', {
+    alias: 'e',
+    type: 'string'
+  })
+  .option('repl', {
+    alias: 'r',
+    type: 'boolean',
+    description: 'Enable the repl.'
+  })
   .option('schema', {
     alias: 's',
     type: 'boolean',
@@ -55,5 +64,23 @@ async function createApi (modules) {
   }
 
   process.env.PORT = argv.port
-  await serve(api)
+
+  if (!argv.endpoint) {
+    await serve(api)
+  }
+
+  if (argv.endpoint) {
+    const repl = await import('./repl.mjs')
+    const FurverClient = await import('./client.mjs')
+    const api = await FurverClient.default({ endpoint: argv.endpoint })
+
+    repl.default(api.exec)
+  }
+
+  if (argv.repl) {
+    const repl = await import('./repl.mjs')
+    const { exec } = await import('./lisp.mjs')
+
+    repl.default(exec(api))
+  }
 })()
