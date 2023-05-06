@@ -9,7 +9,7 @@
     "url": "git@github.com:bas081/furver.git"
   },
   "scripts": {
-    "test": "tap *.test.mjs",
+    "test": "tap *.test.mjs --no-cov",
     "version": "markatzea CONTRIBUTING.mz > CONTRIBUTING.md && git add *.md"
   },
   "bin": {
