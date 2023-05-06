@@ -77,8 +77,9 @@ determined based on your application's needs.
 
 ## Tests
 
-```bash bash -eo pipefail
-# Run tests and generate a coverage report
+Run tests with code coverage report.
+
+```bash
 npx c8 npm t -- -R classic --no-cov
 ```
 
