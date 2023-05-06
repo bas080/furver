@@ -101,141 +101,18 @@ determined based on your application's needs.
 
 ## Tests
 
-```bash bash -eo pipefail
-# Run tests and generate a coverage report
+Run tests with code coverage report.
+
+```bash
 npx c8 npm t -- -R classic --no-cov
 ```
-```
 
-> furver@0.0.5 test
-> tap *.test.mjs -R classic --no-cov
+## Contributing
 
-client.test.mjs ....................................... 4/5
-  Skipped: 1
-    handles errors when fetching schema
+Furver is an open-source project, and contributions are always welcome. If you
+would like to contribute, please see the GitHub repository for more
+information.
 
-lisp.test.mjs ....................................... 10/10
-server.test.mjs ....................................... 0/3
-  Returns 400 when receiving malformed JSON data
-  not ok fetch failed
-    stack: |
-      Test.<anonymous> (file://server.test.mjs:23:15)
-    at:
-      line: 11522
-      column: 11
-      file: node:internal/deps/undici/undici
-      function: Object.fetch
-    type: TypeError
-    cause:
-      !error
-      name: Error
-      message: connect ECONNREFUSED 127.0.0.1:3000
-      stack: |-
-        Error: connect ECONNREFUSED 127.0.0.1:3000
-            at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1571:16)
-      errno: -111
-      code: ECONNREFUSED
-      syscall: connect
-      address: 127.0.0.1
-      port: 3000
-    tapCaught: returnedPromiseRejection
-    test: Returns 400 when receiving malformed JSON data
-  
-  Returns 500 status
-  not ok fetch failed
-    origin:
-      at:
-        line: 11522
-        column: 11
-        file: node:internal/deps/undici/undici
-        function: Object.fetch
-      stack: |
-        Test.<anonymous> (file://server.test.mjs:37:17)
-      type: TypeError
-      cause:
-        !error
-        name: Error
-        message: connect ECONNREFUSED 127.0.0.1:3000
-        stack: |-
-          Error: connect ECONNREFUSED 127.0.0.1:3000
-              at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1571:16)
-        errno: -111
-        code: ECONNREFUSED
-        syscall: connect
-        address: 127.0.0.1
-        port: 3000
-    found:
-      !error
-      name: TypeError
-      message: fetch failed
-      stack: >-
-        TypeError: 
-            at Object.fetch (node:internal/deps/undici/undici:11522:11)
-            at processTicksAndRejections (node:internal/process/task_queues:95:5)
-            at Test.<anonymous> (file:///home/ant/projects/furver/server.test.mjs:37:17)
-      cause:
-        name: Error
-        message: connect ECONNREFUSED 127.0.0.1:3000
-        stack: |-
-          Error: connect ECONNREFUSED 127.0.0.1:3000
-              at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1571:16)
-        errno: -111
-        code: ECONNREFUSED
-        syscall: connect
-        address: 127.0.0.1
-        port: 3000
-    at:
-      line: 45
-      column: 7
-      file: file:///home/ant/projects/furver/server.test.mjs
-      type: Test
-    stack: |
-      Test.<anonymous> (file://server.test.mjs:45:7)
-  
-  Test 200 status
-  not ok fetch failed
-    stack: |
-      Test.<anonymous> (file://server.test.mjs:54:15)
-    at:
-      line: 11522
-      column: 11
-      file: node:internal/deps/undici/undici
-      function: Object.fetch
-    type: TypeError
-    cause:
-      !error
-      name: Error
-      message: connect ECONNREFUSED 127.0.0.1:3000
-      stack: |-
-        Error: connect ECONNREFUSED 127.0.0.1:3000
-            at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1571:16)
-      errno: -111
-      code: ECONNREFUSED
-      syscall: connect
-      address: 127.0.0.1
-      port: 3000
-    tapCaught: returnedPromiseRejection
-    test: Test 200 status
+## License
 
-total ............................................... 14/18
-  
-
-  14 passing (30s)
-  1 pending
-  3 failing
-
-----------------|---------|----------|---------|---------|-------------------
-File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
-----------------|---------|----------|---------|---------|-------------------
-All files       |    72.1 |    85.45 |    64.7 |    72.1 |                   
- furver         |   71.91 |    85.18 |   84.61 |   71.91 |                   
-  cli.mjs       |   89.09 |    42.85 |     100 |   89.09 | 35-36,47-50       
-  client.mjs    |   91.22 |    85.71 |     100 |   91.22 | 18-19,24,49-50    
-  lisp.mjs      |   94.44 |       95 |     100 |   94.44 | 49-51             
-  schema.mjs    |   14.28 |      100 |       0 |   14.28 | 2-7               
-  server.mjs    |   41.48 |    91.66 |      75 |   41.48 | 8-14,22-67,82-83  
- furver/example |   74.07 |      100 |       0 |   74.07 |                   
-  api.mjs       |   74.07 |      100 |       0 |   74.07 | 11,14,17-18,22-24 
-----------------|---------|----------|---------|---------|-------------------
-```
-bash -eo pipefail exited with code 1
+See the [LICENSE](./LICENSE.md) file for details.
