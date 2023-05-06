@@ -13,31 +13,32 @@ operations in a single request.
 ## Usage
 
 ```bash
-npx furver ./example/api.mjs --port=4040
+npx furver ./example/api.mjs
 ```
 
-And it comes with a client that has functions that directly map to the
-functions in the provided module.
+Furver includes a client with functions that correspond to those in the module.
+Plus, it handles bulk requests for you, combining sequential calls into
+a single POST request.
 
-```js cat ./example/client.mjs
+```js node
+(async function() {
+
+  const { default: FurverClient } = await import('./client.mjs')
+
+  const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
+
+  console.log(await Promise.all([
+    api.identity('hello world'),
+    api.timestamp(),
+    api.version()
+  ]))
+
+})()
 ```
-
-```node node ./example/client.mjs
-```
-
-It also automatically performs bulk requests for you. These three function
-calls result in a single POST request.
 
 ```bash bash
 furver --help
 ```
-
-## HTTP Frameworks
-
-You might be using a (popular) HTTP framework. Furver should support your
-framework. If not, it should be trivial to implement.
-
-> Open for **contributors**.
 
 ## Schema
 
@@ -47,6 +48,9 @@ For debugging or other reasons it is possible to get the schema using the
 ```bash bash | head -c 80 && echo
 furver --schema ./example/api.mjs
 ```
+
+> Generating the schema and passing it as an object to the client removes the
+> need to fetch the schema from the server and readies the client for requests.
 
 ## Security
 
