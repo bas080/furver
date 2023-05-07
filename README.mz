@@ -129,6 +129,10 @@ npm t
 npx c8 npm t
 ```
 
+## Changelog
+
+See the [CHANGELOG.md](./CHANGELOG.md) for a list of changes over time.
+
 ## Contributing
 
 Want to contribute? The [CONTRIBUTING.md](./CONTRIBUTING.md) might help you get
@@ -136,4 +140,4 @@ started quicker.
 
 ## License
 
-See the [LICENSE](./LICENSE.md) file for details.
+See the [LICENSE.md](./LICENSE.md) file for details.

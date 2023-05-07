@@ -19,6 +19,7 @@ command.
     + [REPL](#repl)
     + [Endpoint](#endpoint)
 - [Tests](#tests)
+- [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -60,7 +61,7 @@ corresponds to the functions in the module.
 })()
 ```
 ```
-[ 'hello world', 1683476661168, '0.0.21' ]
+[ 'hello world', 1683479333983, '0.0.21' ]
 ```
 
 > [Read more about the client.](./docs/client.md)
@@ -160,8 +161,12 @@ npm t
 
 # or with code coverage
 
-npx c8 npm t -- -R classic --no-cov
+npx c8 npm t
 ```
+
+## Changelog
+
+See the [CHANGELOG.md](./CHANGELOG.md) for a list of changes over time.
 
 ## Contributing
 
@@ -170,4 +175,4 @@ started quicker.
 
 ## License
 
-See the [LICENSE](./LICENSE.md) file for details.
+See the [LICENSE.md](./LICENSE.md) file for details.

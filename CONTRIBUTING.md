@@ -11,19 +11,21 @@ npm link
 ```
 ```
 
-up to date in 4s
-
-31 packages are looking for funding
-  run `npm fund` for details
-
-added 208 packages, and audited 371 packages in 3s
+added 208 packages, and audited 371 packages in 2s
 
 31 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
 
-up to date, audited 3 packages in 938ms
+added 208 packages, and audited 371 packages in 2s
+
+31 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+up to date, audited 3 packages in 864ms
 
 found 0 vulnerabilities
 ```
