@@ -60,7 +60,7 @@ corresponds to the functions in the module.
 })()
 ```
 ```
-[ 'hello world', 1683468330360, '0.0.19' ]
+[ 'hello world', 1683470152415, '0.0.20' ]
 ```
 
 > [Read more about the client.](./docs/client.md)

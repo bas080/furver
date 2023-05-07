@@ -12,7 +12,7 @@ npm install furver --no-save
 ```
 ```
 
-removed 1 package, and audited 371 packages in 3s
+removed 1 package, and audited 371 packages in 998ms
 
 31 packages are looking for funding
   run `npm fund` for details
@@ -26,11 +26,11 @@ added 208 packages, and audited 371 packages in 3s
 
 found 0 vulnerabilities
 
-up to date, audited 3 packages in 1s
+up to date, audited 3 packages in 892ms
 
 found 0 vulnerabilities
 
-added 1 package, and audited 372 packages in 1s
+added 1 package, and audited 372 packages in 3s
 
 31 packages are looking for funding
   run `npm fund` for details
