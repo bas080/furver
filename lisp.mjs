@@ -59,7 +59,7 @@ const exec = curryN(2, async (env, expression) => {
   const fn = castFunction(env[operator])
 
   try {
-    return await fn(...(await Promise.all(args.map(exec(env)))))
+    return await fn.call(env, ...(await Promise.all(args.map(exec(env)))))
   } catch (error) {
     debug(error)
     throw error

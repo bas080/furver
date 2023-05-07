@@ -14,8 +14,17 @@ function tryCatch (tryFn, catchFn) {
   }
 }
 
-export default async function serve (api) {
-  const apiEval = exec(deepFreeze(api))
+const serverSymbol = Symbol('server')
+
+export const withRequest = method => function (...args) {
+  console.log(method, args)
+  const request = this[serverSymbol]
+
+  return method.call(this, request, ...args)
+}
+
+async function FurverServer (api) {
+  const frozenDeep = deepFreeze(api)
 
   debug('API', Object.keys(api))
 
@@ -51,7 +60,10 @@ export default async function serve (api) {
 
         debug('Evaluate', parsedData)
 
-        const result = await apiEval(parsedData)
+        const requestEnv = Object.create(frozenDeep)
+        requestEnv[serverSymbol] = request
+
+        const result = await exec(requestEnv, parsedData)
 
         debug('Result', result)
 
@@ -105,3 +117,5 @@ function deepFreeze (object, name = '') {
 function isPrimitive (value) {
   return (typeof value !== 'object' && typeof value !== 'function') || value === null
 }
+
+export default FurverServer

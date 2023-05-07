@@ -26,6 +26,8 @@ that also hosts the schema of the module.
 Furver includes a client that fetches the schema and creates an API that
 corresponds to the functions in the module.
 
+> [Read more about the Furver server.](./docs/server.md)
+
 ### Client
 
 - It allows the API to be consumed as if it is defined in the current process.

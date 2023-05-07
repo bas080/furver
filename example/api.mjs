@@ -1,6 +1,7 @@
 import * as ramda from 'ramda'
 import lips from '@jcubic/lips'
 import { readFileSync } from 'node:fs'
+import { withRequest } from '../server.mjs'
 
 const _package = JSON.parse(readFileSync('./package.json').toString())
 
@@ -8,6 +9,9 @@ const invoices = {}
 
 const api = {
   ...ramda,
+  method: withRequest((req) => {
+    return req.method
+  }),
   version () {
     return _package.version
   },
