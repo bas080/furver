@@ -1,3 +1,7 @@
+import _debug from './debug.mjs'
+
+const debug = _debug.extend('lisp')
+
 const curryN = (n, fn) => {
   const arity = n || fn.length
   return function curried (...args) {
@@ -15,6 +19,8 @@ function castFunction (x) {
 }
 
 const exec = curryN(2, async (env, expression) => {
+  debug('exec', expression)
+
   if (!Array.isArray(expression)) {
     return expression
   }
@@ -45,7 +51,9 @@ const exec = curryN(2, async (env, expression) => {
 
   // Throw error if operator is not in env.
   if (!(operator in env)) {
-    throw new Error(`Unknown expression: ${operator}`)
+    const error = new Error(`Unknown expression: ${operator}`)
+    debug(error)
+    throw error
   }
 
   const fn = castFunction(env[operator])
@@ -53,7 +61,7 @@ const exec = curryN(2, async (env, expression) => {
   try {
     return await fn(...(await Promise.all(args.map(exec(env)))))
   } catch (error) {
-    console.error('ferver:error ', expression)
+    debug(error)
     throw error
   }
 })

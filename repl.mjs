@@ -1,4 +1,7 @@
 import readline from 'readline'
+import _debug from './debug.mjs'
+
+const debug = _debug.extend('repl')
 
 export default function repl (cb) {
   const rl = readline.createInterface({
@@ -6,20 +9,23 @@ export default function repl (cb) {
     output: process.stdout
   })
 
+  debug('Started REPL')
+
   rl.prompt()
 
   rl.on('line', async (input) => {
     try {
-      const output = JSON.parse(input)
+      // eslint-disable-next-line
+      const output = eval(input)
 
-      console.log(await cb(output))
+      console.log(JSON.stringify(await cb(output), null, 2))
     } catch (err) {
       console.error(err)
     }
 
     rl.prompt()
   }).on('close', () => {
-    console.log('Exiting REPL')
+    debug('Exiting REPL')
     process.exit(0)
   })
 }

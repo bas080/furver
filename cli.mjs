@@ -17,13 +17,16 @@ const argv = yargs(hideBin(process.argv))
     alias: 'v',
     type: 'boolean'
   })
+  .option('exec', {
+    alias: 'e',
+    type: 'string'
+  })
   .option('port', {
     alias: 'p',
     type: 'number',
     default: process.env.PORT || 3000
   })
   .option('endpoint', {
-    alias: 'e',
     type: 'string'
   })
   .option('repl', {
@@ -38,10 +41,8 @@ const argv = yargs(hideBin(process.argv))
   })
   .parse()
 
-const debug = Debug(name)
-
 if (argv.verbose) {
-  process.env.DEBUG = '*'
+  Debug.enable(`${name}*`)
 }
 
 async function createApi (modules) {
@@ -58,7 +59,7 @@ async function createApi (modules) {
   return api
 }
 
-(async function () {
+async function main () {
   const api = await createApi(argv._)
 
   if (argv.schema) {
@@ -69,15 +70,26 @@ async function createApi (modules) {
   process.env.PORT = argv.port
 
   if (!argv.endpoint) {
+    if (argv.exec) {
+      const { exec } = await import('./lisp.mjs')
+
+      console.log(JSON.stringify(await exec(api, JSON.parse(argv.exec))))
+      process.exit()
+    }
+
     await serve(api)
   }
 
   if (argv.endpoint) {
     const repl = await import('./repl.mjs')
     const FurverClient = await import('./client.mjs')
+
     const api = await FurverClient.default({ endpoint: argv.endpoint })
 
-    debug('Repl', argv.endpoint)
+    if (argv.exec) {
+      console.log(JSON.stringify(await api.exec(JSON.parse(argv.exec))))
+      process.exit()
+    }
 
     repl.default(api.exec)
   }
@@ -86,8 +98,8 @@ async function createApi (modules) {
     const repl = await import('./repl.mjs')
     const { exec } = await import('./lisp.mjs')
 
-    debug('Repl', 'process')
-
     repl.default(exec(api))
   }
-})()
+}
+
+main()

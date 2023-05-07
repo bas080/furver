@@ -1,4 +1,9 @@
+import _debug from './debug.mjs'
+
+const debug = _debug.extend('client')
+
 FurverClient.fetch = function furverClientFetch (url, options) {
+  debug(`fetching ${url}`)
   return fetch(url, {
     method: 'post',
     ...options
@@ -6,6 +11,7 @@ FurverClient.fetch = function furverClientFetch (url, options) {
 }
 
 FurverClient.schema = async function furverClientSchema (url) {
+  debug(`fetching schema from ${url}`)
   const schemaRes = await fetch(url)
   return await schemaRes.json()
 }
@@ -68,6 +74,8 @@ async function FurverClient ({
   }
 
   api.exec = bulkFetch
+
+  debug('FurverClient initialized with endpoint', endpoint)
 
   return assignMethods(await castFunction(schema)(`${endpoint}/schema`))
 }

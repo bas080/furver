@@ -1,9 +1,10 @@
 import http from 'node:http'
 import { exec } from './lisp.mjs'
+import _debug from './debug.mjs'
 import Debug from 'debug'
 import schema from './schema.mjs'
 
-const debug = Debug('furver')
+const debug = _debug.extend('server')
 
 function tryCatch (tryFn, catchFn) {
   try {
@@ -69,7 +70,15 @@ export default async function serve (api) {
 
   const port = process.env.PORT
 
-  server.listen(port)
+  return new Promise((resolve, reject) => {
+    server.listen(port, () => {
+      const namespaces = Debug.disable()
+      Debug.enable('furver:server')
+      debug(`Listening on port ${port}`)
+      Debug.enable(namespaces)
+      resolve()
+    })
+  })
 }
 
 function deepFreeze (object, name = '') {
