@@ -3,6 +3,7 @@ import { exec } from './lisp.mjs'
 import _debug from './debug.mjs'
 import Debug from 'debug'
 import schema from './schema.mjs'
+import fs from 'node:fs'
 
 const debug = _debug.extend('server')
 
@@ -34,6 +35,12 @@ async function FurverServer (api) {
       response.writeHead(200, { 'Content-Type': 'application/json' })
       response.write(JSON.stringify(schema(api)))
       response.end()
+      return
+    }
+
+    if (request.url === '/client') {
+      debug('Serving client')
+      fs.createReadStream('./client.js').pipe(response)
       return
     }
 

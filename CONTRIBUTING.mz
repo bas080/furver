@@ -8,9 +8,17 @@ First clone the project and then run `npm link`.
 npm install
 npm ci
 npm link
+git add package-lock.json
 ```
 
 You should now be able to run the bin scripts.
+
+## Client Bundle
+
+```bash bash
+npm run build
+git add ./client.min.js
+```
 
 ## Formatting
 

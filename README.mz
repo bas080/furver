@@ -50,6 +50,22 @@ corresponds to the functions in the module.
 })()
 ```
 
+By default the server hosts a bundled version of the client on `/client.js`.
+Using this file is optional.
+
+```html
+<script src="http://localhost:8999/client.js?jsonp=myFunction"></script>
+<script>
+  function myFunction(api) {
+    console.log(await Promise.all([
+      api.identity('hello world'),
+      api.timestamp(),
+      api.version()
+    ]))
+  }
+</script>
+```
+
 > [Read more about the client.](./docs/client.md)
 
 ### Lisp
