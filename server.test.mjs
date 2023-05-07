@@ -5,18 +5,18 @@ const { test } = tap
 
 let serverProcess
 
+const port = Number(process.env.PORT || 3000) + 1
+const apiUri = `http://localhost:${port}`
+
 tap.before(async () => {
   // Start the server in a child process
-  serverProcess = spawn('node', ['./cli.mjs', './example/api.mjs'])
+  serverProcess = spawn('node', ['./cli.mjs', './example/api.mjs', '--port', port])
 
   // Wait for the server to start listening on the port
   await new Promise((resolve) => serverProcess.stderr.once('data', resolve))
 })
 
 tap.teardown(() => serverProcess.kill())
-
-const port = process.env.PORT
-const apiUri = `http://localhost:${port}`
 
 test('Returns 400 when receiving malformed JSON data', async (t) => {
   // Send a POST request with malformed JSON data
@@ -28,8 +28,7 @@ test('Returns 400 when receiving malformed JSON data', async (t) => {
 
   // Verify the response status code
   t.equal(res.status, 400)
-
-  // Stop the server
+  t.end()
 })
 
 test('Returns 500 status', async (t) => {
@@ -63,4 +62,5 @@ test('Test 200 status', async (t) => {
   // Verify the response body
   const responseBody = await res.json()
   t.same(responseBody, expectedResponse)
+  t.end()
 })

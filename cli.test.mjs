@@ -3,13 +3,17 @@ import { spawn } from 'child_process'
 
 const bin = './cli.mjs'
 
+const PORT = process.env.PORT || 3000
+
 test('run server with default port', (t) => {
   const child = spawn(bin)
 
   child.on('error', (err) => t.fail(err))
   child.stderr.on('data', (data) => {
-    t.ok(data.toString().includes('Listening on port 3000'))
-    t.end()
+    if (data.toString().includes(`Listening on port ${PORT}`)) {
+      t.pass()
+      t.end()
+    }
   })
 
   setTimeout(() => {
@@ -22,8 +26,10 @@ test('run server with custom port', (t) => {
 
   child.on('error', (err) => t.fail(err))
   child.stderr.on('data', (data) => {
-    t.ok(data.toString().includes('Listening on port 4000'))
-    t.end()
+    if (data.toString().includes('Listening on port 4000')) {
+      t.pass()
+      t.end()
+    }
   })
 
   setTimeout(() => {

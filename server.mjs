@@ -36,11 +36,12 @@ export default async function serve (api) {
     request.on('end', async () => {
       try {
         debug('Parse')
-        const data = Buffer.concat(chunks)
+        const data = Buffer.concat(chunks).toString()
         const parsedData = tryCatch(
-          () => JSON.parse(data.toString()),
+          () => JSON.parse(data),
           error => {
             debug(error)
+            debug(data)
             error.status = 400
             throw error
           })
