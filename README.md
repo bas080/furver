@@ -39,6 +39,8 @@ that also hosts the schema of the module.
 Furver includes a client that fetches the schema and creates an API that
 corresponds to the functions in the module.
 
+> [Read more about the Furver server.](./docs/server.md)
+
 ### Client
 
 - It allows the API to be consumed as if it is defined in the current process.
@@ -61,7 +63,23 @@ corresponds to the functions in the module.
 })()
 ```
 ```
-[ 'hello world', 1683479333983, '0.0.21' ]
+[ 'hello world', 1683494649607, '0.0.23' ]
+```
+
+By default the server hosts a bundled version of the client on `/client.js`.
+Using this file is optional.
+
+```html
+<script src="http://localhost:8999/client.js?jsonp=myFunction"></script>
+<script>
+  function myFunction(api) {
+    console.log(await Promise.all([
+      api.identity('hello world'),
+      api.timestamp(),
+      api.version()
+    ]))
+  }
+</script>
 ```
 
 > [Read more about the client.](./docs/client.md)
