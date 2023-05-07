@@ -126,7 +126,7 @@ npm t
 
 # or with code coverage
 
-npx c8 npm t -- -R classic --no-cov
+npx c8 npm t
 ```
 
 ## Contributing
