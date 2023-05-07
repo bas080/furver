@@ -2,11 +2,26 @@ import _debug from './debug.mjs'
 
 const debug = _debug.extend('client')
 
-FurverClient.fetch = function furverClientFetch (url, options) {
+FurverClient.fetch = function furverClientPost (url, options) {
   debug(`fetching ${url}`)
+
+  if (options.method === 'get') { return furverClientGet(url, options) }
+
   return fetch(url, {
     method: 'post',
     ...options
+  })
+}
+
+function furverClientGet (url, options) {
+  debug('using get option')
+  const { body, ...otherOptions } = options || {}
+  const queryString = new URLSearchParams({ body }).toString()
+  const fullUrl = `${url}?${queryString}`
+
+  return fetch(fullUrl, {
+    method: 'get',
+    ...otherOptions
   })
 }
 
@@ -23,20 +38,22 @@ const castFunction = x => isFunction(x) ? x : () => x
 async function FurverClient ({
   endpoint = 'http://localhost:3000',
   fetch = FurverClient.fetch,
-  schema = FurverClient.schema
+  schema = FurverClient.schema,
+  method = 'post'
 }) {
   const api = {}
   let promise
   let reqs = []
 
-  const bulkFetch = (expr) => {
+  const bulkFetch = method => (expr) => {
     const index = reqs.length
     reqs.push(expr)
 
     promise = promise || new Promise((resolve, reject) => {
       setTimeout(() => {
         fetch(endpoint, {
-          body: JSON.stringify([reqs])
+          body: JSON.stringify([reqs]),
+          method
         })
           .then(async (res) => {
             if (!res.ok) {
@@ -68,12 +85,13 @@ async function FurverClient ({
     }
 
     return schema.reduce((api, [name]) => {
-      api[name] = (...args) => bulkFetch([name, ...args])
+      api[name] = (...args) => bulkFetch(method)([name, ...args])
       return api
     }, api)
   }
 
-  api.exec = bulkFetch
+  api.post = bulkFetch('post')
+  api.get = bulkFetch('get')
 
   debug('FurverClient initialized with endpoint', endpoint)
 

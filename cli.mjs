@@ -87,14 +87,14 @@ async function main () {
     const api = await FurverClient.default({ endpoint: argv.endpoint })
 
     if (argv.exec) {
-      console.log(JSON.stringify(await api.exec(JSON.parse(argv.exec))))
+      console.log(JSON.stringify(await api.post(JSON.parse(argv.exec))))
       process.exit()
     }
 
-    repl.default(api.exec)
+    repl.default(api.post)
   }
 
-  if (argv.repl) {
+  if (argv.repl && !argv.endpoint) {
     const repl = await import('./repl.mjs')
     const { exec } = await import('./lisp.mjs')
 

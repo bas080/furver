@@ -8,7 +8,6 @@ First clone the project and then run `npm link`.
 npm install
 npm ci
 npm link
-npm install furver --no-save
 ```
 
 You should now be able to run the bin scripts.

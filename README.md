@@ -47,7 +47,7 @@ corresponds to the functions in the module.
 ```js node
 (async function() {
 
-  const { default: FurverClient } = await import('furver/client.mjs')
+  const { default: FurverClient } = await import('./client.mjs')
 
   const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
 
@@ -60,7 +60,7 @@ corresponds to the functions in the module.
 })()
 ```
 ```
-[ 'hello world', 1683470152415, '0.0.20' ]
+[ 'hello world', 1683476609734, '0.0.20' ]
 ```
 
 > [Read more about the client.](./docs/client.md)
@@ -74,7 +74,7 @@ in a single request:
 ```javascript node
 (async function() {
 
-  const { default: FurverClient } = await import('furver/client.mjs')
+  const { default: FurverClient } = await import('./client.mjs')
 
   const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
 
@@ -82,7 +82,7 @@ in a single request:
     amount: 42, customerId: 1
   }]]
 
-  console.log(await api.exec(createAndGetInvoice))
+  console.log(await api.post(createAndGetInvoice))
 })()
 ```
 ```
@@ -107,8 +107,9 @@ Options:
       --help      Show help                                            [boolean]
       --version   Show version number                                  [boolean]
   -v, --verbose                                                        [boolean]
+  -e, --exec                                                            [string]
   -p, --port                                          [number] [default: "8999"]
-  -e, --endpoint                                                        [string]
+      --endpoint                                                        [string]
   -r, --repl      Enable the repl.                                     [boolean]
   -s, --schema    Output the API schema without running the server.    [boolean]
 ```

@@ -8,18 +8,17 @@ First clone the project and then run `npm link`.
 npm install
 npm ci
 npm link
-npm install furver --no-save
 ```
 ```
 
-removed 1 package, and audited 371 packages in 998ms
+up to date, audited 371 packages in 1s
 
 31 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
 
-added 208 packages, and audited 371 packages in 3s
+added 208 packages, and audited 371 packages in 2s
 
 31 packages are looking for funding
   run `npm fund` for details
@@ -27,13 +26,6 @@ added 208 packages, and audited 371 packages in 3s
 found 0 vulnerabilities
 
 up to date, audited 3 packages in 892ms
-
-found 0 vulnerabilities
-
-added 1 package, and audited 372 packages in 3s
-
-31 packages are looking for funding
-  run `npm fund` for details
 
 found 0 vulnerabilities
 ```

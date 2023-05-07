@@ -35,7 +35,7 @@ corresponds to the functions in the module.
 ```js node
 (async function() {
 
-  const { default: FurverClient } = await import('furver/client.mjs')
+  const { default: FurverClient } = await import('./client.mjs')
 
   const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
 
@@ -59,7 +59,7 @@ in a single request:
 ```javascript node
 (async function() {
 
-  const { default: FurverClient } = await import('furver/client.mjs')
+  const { default: FurverClient } = await import('./client.mjs')
 
   const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
 
@@ -67,7 +67,7 @@ in a single request:
     amount: 42, customerId: 1
   }]]
 
-  console.log(await api.exec(createAndGetInvoice))
+  console.log(await api.post(createAndGetInvoice))
 })()
 ```
 

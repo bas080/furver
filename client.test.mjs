@@ -76,4 +76,40 @@ test('FurverClient', async (t) => {
     const api = await FurverClient({ schema, fetch })
     await t.rejects(() => api.add(2, 3))
   })
+
+  t.test('resolves to an object with `get` and `post` methods', async (t) => {
+    const schema = [['add', 2]]
+    const fetch = async () => ({ ok: true, json: async () => schema })
+    const api = await FurverClient({ schema, fetch })
+    t.type(api.get, 'function')
+    t.type(api.post, 'function')
+  })
+
+  t.test('invokes API endpoints with correct arguments using `post` method', async (t) => {
+    const schema = [['add', 2]]
+    const expr = ['add', 2, 3]
+    const fetch = async (url, options) => {
+      t.equal(options.method, 'post')
+      t.end()
+
+      return { ok: true, json: async () => [5] }
+    }
+
+    const api = await FurverClient({ schema, fetch })
+    await api.post(expr)
+  })
+
+  t.test('invokes API endpoints with correct arguments using `get` method', async (t) => {
+    const schema = [['add', 2]]
+    const expr = ['add', 2, 3]
+    const fetch = async (url, options) => {
+      t.equal(options.method, 'get')
+      t.end()
+
+      return { ok: true, json: async () => [5] }
+    }
+
+    const api = await FurverClient({ schema, fetch })
+    await api.get(expr)
+  })
 })
