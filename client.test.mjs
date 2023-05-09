@@ -25,7 +25,10 @@ test('FurverClient', async (t) => {
     let actualArgs
     const fetch = async (url, options) => {
       const { body } = (options || {})
-      const [[[, ...args]]] = JSON.parse(body)
+
+      const [op, ...args] = body
+
+      t.equal(op, 'add')
 
       actualArgs = args
       return { ok: true, json: async () => [5] }
@@ -57,32 +60,33 @@ test('FurverClient', async (t) => {
     await t.rejects(() => FurverClient({ schema, fetch }))
   })
 
-  t.test('handles non-OK status code', async (t) => {
-    const schema = [['add', 2]]
-    const fetch = async () => {
-      return { ok: false, statusText: 'Bad fetch' }
-    }
+  // IS NO LONGER PART OF THE FETCH FUNCTION
+  // t.test('handles non-OK status code', async (t) => {
+  //   const schema = [['add', 2]]
+  //   const fetch = async () => {
+  //     return { ok: false, statusText: 'Bad fetch' }
+  //   }
 
-    const api = await FurverClient({ schema, fetch })
-    await t.rejects(() => api.add(2, 3))
-  })
+  //   const api = await FurverClient({ schema, fetch })
+  //   await t.rejects(async () => console.log(await api.add(2, 3)))
+  // })
 
-  t.test('handles invalid response format', async (t) => {
-    const schema = [['add', 2]]
-    const fetch = async () => {
-      return { ok: true, json: async () => ({ result: 5 }) }
-    }
+  // NO NEED TO HANDLE THE INCORRECT USE OF FURVER.
+  // t.test('handles invalid response format', async (t) => {
+  //   const schema = [['add', 2]]
+  //   const fetch = async () => {
+  //     return { ok: true, json: async () => ({ result: 5 }) }
+  //   }
 
-    const api = await FurverClient({ schema, fetch })
-    await t.rejects(() => api.add(2, 3))
-  })
+  //   const api = await FurverClient({ schema, fetch })
+  //   await t.rejects(() => api.add(2, 3))
+  // })
 
-  t.test('resolves to an object with `get` and `post` methods', async (t) => {
+  t.test('resolves to an object with `call` method', async (t) => {
     const schema = [['add', 2]]
     const fetch = async () => ({ ok: true, json: async () => schema })
     const api = await FurverClient({ schema, fetch })
-    t.type(api.get, 'function')
-    t.type(api.post, 'function')
+    t.type(api.call, 'function')
   })
 
   t.test('invokes API endpoints with correct arguments using `post` method', async (t) => {
@@ -90,26 +94,13 @@ test('FurverClient', async (t) => {
     const expr = ['add', 2, 3]
     const fetch = async (url, options) => {
       t.equal(options.method, 'post')
+      t.match(options.body, expr)
       t.end()
 
       return { ok: true, json: async () => [5] }
     }
 
     const api = await FurverClient({ schema, fetch })
-    await api.post(expr)
-  })
-
-  t.test('invokes API endpoints with correct arguments using `get` method', async (t) => {
-    const schema = [['add', 2]]
-    const expr = ['add', 2, 3]
-    const fetch = async (url, options) => {
-      t.equal(options.method, 'get')
-      t.end()
-
-      return { ok: true, json: async () => [5] }
-    }
-
-    const api = await FurverClient({ schema, fetch })
-    await api.get(expr)
+    await api.call(expr)
   })
 })

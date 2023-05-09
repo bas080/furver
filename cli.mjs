@@ -10,6 +10,8 @@ import Debug from 'debug'
 const name = 'furver'
 process.title = name
 
+Debug.enable('*:start,*:error')
+
 const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 [...modules] [options]')
   .scriptName(name)
@@ -81,24 +83,24 @@ async function main () {
   }
 
   if (argv.endpoint) {
-    const repl = await import('./repl.mjs')
+    const { default: repl } = await import('./repl.mjs')
     const FurverClient = await import('./client.mjs')
 
     const api = await FurverClient.default({ endpoint: argv.endpoint })
 
     if (argv.exec) {
-      console.log(JSON.stringify(await api.post(JSON.parse(argv.exec))))
+      console.log(JSON.stringify(await api.call(JSON.parse(argv.exec))))
       process.exit()
     }
 
-    repl.default(api.post)
+    repl(api.call)
   }
 
   if (argv.repl && !argv.endpoint) {
-    const repl = await import('./repl.mjs')
+    const { default: repl } = await import('./repl.mjs')
     const { exec } = await import('./lisp.mjs')
 
-    repl.default(exec(api))
+    repl(exec(api))
   }
 }
 

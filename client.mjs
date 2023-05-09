@@ -1,29 +1,40 @@
 import _debug from './debug.mjs'
+import { debounceWithIndex } from './debounce.mjs'
+import { FurverInvalidSchemaError } from './error.mjs'
 
 const debug = _debug.extend('client')
+const debugError = debug.extend('error')
 
-FurverClient.fetch = function furverClientPost (url, options) {
-  debug(`fetching ${url}`)
+FurverClient.bulkPost = debounceWithIndex(async calls => {
+  const [[url, options]] = calls
+  const body = JSON.stringify([calls.map(([, { body }]) => body)])
 
-  if (options.method === 'get') { return furverClientGet(url, options) }
-
-  return fetch(url, {
+  const res = await fetch(url, {
+    ...options,
     method: 'post',
-    ...options
+    body
   })
-}
 
-function furverClientGet (url, options) {
-  debug('using get option')
-  const { body, ...otherOptions } = options || {}
-  const queryString = new URLSearchParams({ body }).toString()
-  const fullUrl = `${url}?${queryString}`
+  if (!res.ok) {
+    debugError(res)
+    throw res
+  }
 
-  return fetch(fullUrl, {
-    method: 'get',
-    ...otherOptions
-  })
-}
+  return await res.json()
+}, 0)
+
+// TBD: Should keep support for get requests. Implement a get fetch.
+// function furverGet (url, options) {
+//   debug('using get option')
+//   const { body, ...otherOptions } = options || {}
+//   const queryString = new URLSearchParams({ body }).toString()
+//   const fullUrl = `${url}?${queryString}`
+//
+//   return fetch(fullUrl, {
+//     method: 'get',
+//     ...otherOptions
+//   })
+// }
 
 FurverClient.schema = async function furverClientSchema (url) {
   debug(`fetching schema from ${url}`)
@@ -32,66 +43,37 @@ FurverClient.schema = async function furverClientSchema (url) {
 }
 
 const isFunction = x => typeof x === 'function'
-
 const castFunction = x => isFunction(x) ? x : () => x
 
 async function FurverClient ({
+  // DEPRECATE in favor of a fetch function that does this.
   endpoint = 'http://localhost:3000',
-  fetch = FurverClient.fetch,
-  schema = FurverClient.schema,
-  method = 'post'
+
+  fetch = FurverClient.bulkPost,
+  schema = FurverClient.schema
 }) {
   const api = {}
-  let promise
-  let reqs = []
-
-  const bulkFetch = method => (expr) => {
-    const index = reqs.length
-    reqs.push(expr)
-
-    promise = promise || new Promise((resolve, reject) => {
-      setTimeout(() => {
-        fetch(endpoint, {
-          body: JSON.stringify([reqs]),
-          method
-        })
-          .then(async (res) => {
-            if (!res.ok) {
-              return Promise.reject(res)
-            }
-            const json = await res.json()
-            resolve(json)
-          })
-          .catch((error) => {
-            reject(error)
-          })
-          .finally(() => {
-            promise = undefined
-            reqs = []
-          })
-      }, 0)
-    })
-
-    return promise.then((json) => {
-      if (!Array.isArray(json)) { throw new Error('Response should be an array') }
-
-      return json[index]
-    })
-  }
-
   const assignMethods = (schema) => {
     if (!Array.isArray(schema)) {
-      throw new Error('Not a valid schema')
+      throw new FurverInvalidSchemaError('Not a valid schema')
     }
 
     return schema.reduce((api, [name]) => {
-      api[name] = (...args) => bulkFetch(method)([name, ...args])
+      // Ignore the call name.
+      if (name === 'call') return api
+
+      api[name] = (...args) => fetch(endpoint, {
+        body: [name, ...args],
+        method: 'post'
+      })
       return api
     }, api)
   }
 
-  api.post = bulkFetch('post')
-  api.get = bulkFetch('get')
+  api.call = body => fetch(endpoint, {
+    body,
+    method: 'post'
+  })
 
   debug('FurverClient initialized with endpoint', endpoint)
 

@@ -32,17 +32,21 @@ Once you have an instance of the client, you can call methods on it as defined b
 const users = await client.getUsers()
 ```
 
-The client also has a `post` and `get` method that can be used to call any method on the API, even if it's not defined in the schema. For example:
+The client also has a `call` method that can be used to call any method on the
+API, even if it's not defined in the schema. For example:
 
 ```javascript
-const result = await client.post(['customMethod', arg1, arg2])
+const result = await client.call(['customMethod', arg1, arg2])
 ```
 
 This will call the `customMethod` method on the API with the specified arguments.
 
-The `get` method should be used when no mutations occur. Using `get` has the benefits that HTTP GET requests might have in your application/infrastructure.
+The `get` method should be used when no mutations occur. Using `get` has the
+benefits that HTTP GET requests might have in your application/infrastructure.
 
-Note that the `fetch`, `schema`, and `method` options can be customized by passing your own functions or values to the client constructor. For example, if you want to use a different fetch library, you can pass it like this:
+Note that the `fetch`, `schema`, and `method` options can be customized by
+passing your own functions or values to the client constructor. For example, if
+you want to use a different fetch library, you can pass it like this:
 
 ```javascript
 const client = await FurverClient({

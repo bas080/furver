@@ -8,22 +8,32 @@ First clone the project and then run `npm link`.
 npm install
 npm ci
 npm link
+npm link furver
 git add package-lock.json
 ```
 
 You should now be able to run the bin scripts.
 
-## Client Bundle
+## Tests
 
 ```bash bash
-npm run build
-git add ./client.min.js
+npm t -- -R classic
+
+# or with code coverage
+# npx c8 npm t
 ```
 
 ## Formatting
 
 ```bash bash
 npx standard
+```
+
+## Client Bundle
+
+```bash bash
+npm run build
+git add ./client.min.js
 ```
 
 ## Documentation
@@ -39,9 +49,14 @@ npx furver ./example/api.mjs&
 
 sleep 4
 
+rm -f README.md
+
 markatzea README.mz | tee README.md 1>&2
 
+
 npx markdown-toc -i README.md
+
+chmod -w ./README.md
 
 pkill furver
 ```

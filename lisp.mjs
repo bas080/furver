@@ -1,6 +1,8 @@
 import _debug from './debug.mjs'
+import { FurverExpressionError } from './error.mjs'
 
 const debug = _debug.extend('lisp')
+const debugError = debug.extend('error')
 
 const curryN = (n, fn) => {
   const arity = n || fn.length
@@ -51,8 +53,8 @@ const exec = curryN(2, async (env, expression) => {
 
   // Throw error if operator is not in env.
   if (!(operator in env)) {
-    const error = new Error(`Unknown expression: ${operator}`)
-    debug(error)
+    const error = new FurverExpressionError(`Unknown expression: ${operator}`)
+    debugError(error)
     throw error
   }
 
@@ -61,7 +63,7 @@ const exec = curryN(2, async (env, expression) => {
   try {
     return await fn.call(env, ...(await Promise.all(args.map(exec(env)))))
   } catch (error) {
-    debug(error)
+    debugError(error)
     throw error
   }
 })

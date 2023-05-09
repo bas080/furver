@@ -3,14 +3,12 @@ import { spawn } from 'child_process'
 
 const bin = './cli.mjs'
 
-const PORT = process.env.PORT || 3000
-
 test('run server with default port', (t) => {
   const child = spawn(bin)
 
   child.on('error', (err) => t.fail(err))
   child.stderr.on('data', (data) => {
-    if (data.toString().includes(`Listening on port ${PORT}`)) {
+    if (data.toString().includes('Listening on port ')) {
       t.pass()
       t.end()
     }

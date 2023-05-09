@@ -1,8 +1,7 @@
 # Furver
 
 Turn any JavaScript module into a JSON web API with a built-in client and
-Lisp-like language for complex server-side operations, all with just one
-command.
+Lisp-like language for complex server-side operations.
 
 [![NPM](https://img.shields.io/npm/v/furver?color=blue&style=flat-square)](https://www.npmjs.com/package/furver)
 [![NPM Downloads](https://img.shields.io/npm/dm/furver?style=flat-square)](https://www.npmjs.com/package/furver)
@@ -18,7 +17,6 @@ command.
   * [CLI](#cli)
     + [REPL](#repl)
     + [Endpoint](#endpoint)
-- [Tests](#tests)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
@@ -46,6 +44,8 @@ corresponds to the functions in the module.
 - It allows the API to be consumed as if it is defined in the current process.
 - The client automatically handles bulk requests, combining sequential calls
   into a single POST request.
+- Works both in the browser and node.
+- Supports receiving messages.
 
 ```js node
 (async function() {
@@ -63,11 +63,13 @@ corresponds to the functions in the module.
 })()
 ```
 ```
-[ 'hello world', 1683494649607, '0.0.23' ]
+[ 'hello world', 1684373633954, '0.0.23' ]
 ```
 
-By default the server hosts a bundled version of the client on `/client.js`.
+By default the server hosts a bundled version of the client at `./client.min.js`.
 Using this file is optional.
+
+> TBD
 
 ```html
 <script src="http://localhost:8999/client.js?jsonp=myFunction"></script>
@@ -101,7 +103,7 @@ in a single request:
     amount: 42, customerId: 1
   }]]
 
-  console.log(await api.post(createAndGetInvoice))
+  console.log(await api.call(createAndGetInvoice))
 })()
 ```
 ```
@@ -171,16 +173,6 @@ npx furver --endpoint http://localhost:$PORT --exec '["identity", "hello remote"
 ```
 
 You can also start a REPL with a remote server.
-
-## Tests
-
-```bash
-npm t
-
-# or with code coverage
-
-npx c8 npm t
-```
 
 ## Changelog
 

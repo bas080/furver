@@ -1,11 +1,12 @@
 import http from 'node:http'
 import { exec } from './lisp.mjs'
 import _debug from './debug.mjs'
-import Debug from 'debug'
 import schema from './schema.mjs'
 import fs from 'node:fs'
 
 const debug = _debug.extend('server')
+const mustDebug = debug.extend('start')
+const debugError = debug.extend('error')
 
 function tryCatch (tryFn, catchFn) {
   try {
@@ -18,7 +19,6 @@ function tryCatch (tryFn, catchFn) {
 const serverSymbol = Symbol('server')
 
 export const withRequest = method => function (...args) {
-  console.log(method, args)
   const request = this[serverSymbol]
 
   return method.call(this, request, ...args)
@@ -82,7 +82,7 @@ async function FurverServer (api) {
 
         debug('Response', serialized)
       } catch (error) {
-        debug(error)
+        debugError(error)
         error.status = error.status || 500
         response.writeHead(error.status, { 'Content-Type': 'text/plain' })
         response.write(`Status: ${error.status}`)
@@ -95,10 +95,7 @@ async function FurverServer (api) {
 
   return new Promise((resolve, reject) => {
     server.listen(port, () => {
-      const namespaces = Debug.disable()
-      Debug.enable('furver:server')
-      debug(`Listening on port ${port}`)
-      Debug.enable(namespaces)
+      mustDebug(`Listening on port ${port}`)
       resolve()
     })
   })
@@ -111,7 +108,7 @@ function deepFreeze (object, name = '') {
     Object.freeze(object)
     debug('Froze', name)
   } catch (error) {
-    debug('Cannot freeze', object)
+    debugError('Cannot freeze', object)
   }
 
   for (const name in object) {
