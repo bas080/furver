@@ -1,4 +1,4 @@
-# Furver Lisp
+# ./lisp.mjs
 
 The `lisp.mjs` module provides an implementation of a Lisp interpreter that can
 evaluate basic expressions, handle let and fn expressions, and throw an error

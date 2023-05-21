@@ -11,24 +11,22 @@ Lisp-like language for complex server-side operations.
 
 <!-- toc -->
 
-- [Usage](#usage)
-  * [Client](#client)
-  * [Lisp](#lisp)
-  * [CLI](#cli)
-    + [REPL](#repl)
-    + [Endpoint](#endpoint)
+- [Server](#server)
+- [Client](#client)
+- [Lisp](#lisp)
+- [CLI](#cli)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
 
 <!-- tocstop -->
 
-## Usage
+## Server
 
 To use Furver, simply spin up a server.
 
-```bash
-npx furver ./example/api.mjs
+```bash bash | head -n 1
+npx furver server ./example/api.mjs
 ```
 
 This command will convert the specified JavaScript module into a JSON web API
@@ -37,13 +35,13 @@ that also hosts the schema of the module.
 Furver includes a client that fetches the schema and creates an API that
 corresponds to the functions in the module.
 
-> [Read more about the Furver server.](./docs/server.md)
+[Read more about the Furver server.](./server.md)
 
-### Client
+## Client
 
 - It allows the API to be consumed as if it is defined in the current process.
 - The client automatically handles bulk requests, combining sequential calls
-  into a single POST request.
+  into a single request.
 - Works both in the browser and node.
 - Supports receiving messages.
 
@@ -63,7 +61,7 @@ corresponds to the functions in the module.
 })()
 ```
 ```
-[ 'hello world', 1684373633954, '0.0.23' ]
+[ 'hello world', 'hello world', 'hello world' ]
 ```
 
 By default the server hosts a bundled version of the client at `./client.min.js`.
@@ -84,9 +82,9 @@ Using this file is optional.
 </script>
 ```
 
-> [Read more about the client.](./docs/client.md)
+[Read more about the client.](./client.md)
 
-### Lisp
+## Lisp
 
 Furver's Lisp-like language allows developers to perform complex aggregations
 and operations in a single request. For example, to create and get an invoice
@@ -110,10 +108,10 @@ in a single request:
 { amount: 42, customerId: 1 }
 ```
 
-> [Read more about the bare bones Furver lisp.](./docs/lisp.md)
+[Read more about the bare bones Furver lisp.](./lisp.md)
 
 
-### CLI
+## CLI
 
 The goal of Furver's cli is to provide you with all the tools to use, test and
 debug Furver servers.
@@ -122,57 +120,25 @@ debug Furver servers.
 furver --help
 ```
 ```
-Usage: furver [...modules] [options]
+Usage: furver [command] [options..]
+
+Commands:
+  furver server <modules..>                 start server
+  furver repl <modules..>                   start a repl without server
+  furver client [port|url]                  start client repl
+  furver schema                             print schema of api
+  [modules..]|[--port]|[--url]
 
 Options:
-      --help      Show help                                            [boolean]
-      --version   Show version number                                  [boolean]
+      --help     Show help                                             [boolean]
+      --version  Show version number                                   [boolean]
+      --url                                                             [string]
+      --modules  Name or path to modules                                 [array]
   -v, --verbose                                                        [boolean]
-  -e, --exec                                                            [string]
   -p, --port                                          [number] [default: "8999"]
-      --endpoint                                                        [string]
-  -r, --repl      Enable the repl.                                     [boolean]
-  -s, --schema    Output the API schema without running the server.    [boolean]
 ```
 
-#### REPL
-
-Furver includes a simple REPL (Read-Eval-Print Loop) that allows you to
-interact with the API from the command line using Furver's lisp. To start the
-REPL, run the following command:
-
-```bash
-npx furver ./example/api.mjs --repl
-```
-
-Now type a valid lisp expression.
-
-For example, to call the identity function with the argument "hello world", you
-would enter the following:
-
-```
-> ["identity", "hello world"]
-"hello world"
-```
-
-The REPL will parse the input as JSON, pass it to the lisp exec function, and
-print the response to the console.
-
-You can exit the REPL by typing **Ctrl+C** or **Ctrl+D**.
-
-#### Endpoint
-
-To connect with a remote Furver server, you need to specify the --endpoint
-option when starting the Furver server.
-
-```bash bash
-npx furver --endpoint http://localhost:$PORT --exec '["identity", "hello remote"]'
-```
-```
-"hello remote"
-```
-
-You can also start a REPL with a remote server.
+[Read more about the Furver CLI.](./cli.md)
 
 ## Changelog
 

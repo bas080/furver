@@ -1,6 +1,4 @@
-# Furver Client
-
-## Usage
+# ./client.mjs
 
 To use the FurverClient, first import it into your project:
 

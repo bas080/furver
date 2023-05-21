@@ -10,7 +10,7 @@ const apiUri = `http://localhost:${port}`
 
 tap.before(async () => {
   // Start the server in a child process
-  serverProcess = spawn('node', ['./cli.mjs', './example/api.mjs', '--port', port])
+  serverProcess = spawn('node', ['./cli.mjs', 'server', './example/api.mjs', '--port', port])
 
   // Wait for the server to start listening on the port
   await new Promise((resolve) => serverProcess.stderr.once('data', resolve))

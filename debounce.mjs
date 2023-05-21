@@ -30,10 +30,6 @@ export function debounce (callback, milliseconds) {
 export function debounceWithIndex (callback, milliseconds) {
   const innerDebounce = debounce(callback, milliseconds)
 
-  return async (...args) => {
-    const index = innerDebounce.calls.length
-    const result = await innerDebounce(...args)
-
-    return result[index]
-  }
+  return async (...args) =>
+    (await innerDebounce(...args))[innerDebounce.calls.length]
 }

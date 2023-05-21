@@ -4,7 +4,7 @@ import { spawn } from 'child_process'
 const bin = './cli.mjs'
 
 test('run server with default port', (t) => {
-  const child = spawn(bin)
+  const child = spawn(bin, ['server', './example/api.mjs'])
 
   child.on('error', (err) => t.fail(err))
   child.stderr.on('data', (data) => {
@@ -20,7 +20,7 @@ test('run server with default port', (t) => {
 })
 
 test('run server with custom port', (t) => {
-  const child = spawn(bin, ['--port', '4000'])
+  const child = spawn(bin, ['server', '--port', '4000', './example/api.mjs'])
 
   child.on('error', (err) => t.fail(err))
   child.stderr.on('data', (data) => {
@@ -36,7 +36,7 @@ test('run server with custom port', (t) => {
 })
 
 test('output schema', (t) => {
-  const child = spawn(bin, ['--schema', './example/api.mjs'])
+  const child = spawn(bin, ['schema', './example/api.mjs'])
 
   child.on('error', (err) => t.fail(err))
   child.stdout.on('data', (data) => {
@@ -48,11 +48,11 @@ test('output schema', (t) => {
 test('run REPL', (t) => {
   t.plan(1)
 
-  const child = spawn(bin, ['--repl', '--verbose'])
+  const child = spawn(bin, ['repl', './example/api.mjs', '--verbose'])
 
   child.on('error', (err) => t.fail(err))
   child.stderr.on('data', (data) => {
-    if (data.toString().includes('furver:repl Started REPL')) {
+    if (data.toString().includes('furver:repl Starting REPL')) {
       t.pass('REPL started')
     }
   })

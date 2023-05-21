@@ -4,16 +4,23 @@ import { FurverInvalidSchemaError } from './error.mjs'
 
 const debug = _debug.extend('client')
 const debugError = debug.extend('error')
+const debugFetch = debug.extend('fetch')
 
-FurverClient.bulkPost = debounceWithIndex(async calls => {
+FurverClient.bulkPost = (config = {
+  fetch
+}) => debounceWithIndex(async calls => {
   const [[url, options]] = calls
   const body = JSON.stringify([calls.map(([, { body }]) => body)])
 
-  const res = await fetch(url, {
+  const _options = {
     ...options,
     method: 'post',
     body
-  })
+  }
+
+  debugFetch(url, _options)
+
+  const res = await fetch(url, _options)
 
   if (!res.ok) {
     debugError(res)
@@ -46,10 +53,8 @@ const isFunction = x => typeof x === 'function'
 const castFunction = x => isFunction(x) ? x : () => x
 
 async function FurverClient ({
-  // DEPRECATE in favor of a fetch function that does this.
   endpoint = 'http://localhost:3000',
-
-  fetch = FurverClient.bulkPost,
+  fetch = FurverClient.bulkPost(),
   schema = FurverClient.schema
 }) {
   const api = {}
@@ -57,6 +62,8 @@ async function FurverClient ({
     if (!Array.isArray(schema)) {
       throw new FurverInvalidSchemaError('Not a valid schema')
     }
+
+    api.schema = () => schema
 
     return schema.reduce((api, [name]) => {
       // Ignore the call name.
@@ -66,6 +73,9 @@ async function FurverClient ({
         body: [name, ...args],
         method: 'post'
       })
+
+      api[name].toJSON = () => name
+
       return api
     }, api)
   }

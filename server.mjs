@@ -24,12 +24,13 @@ export const withRequest = method => function (...args) {
   return method.call(this, request, ...args)
 }
 
-async function FurverServer (api) {
+async function FurverServer (api, port) {
   const frozenDeep = deepFreeze(api)
 
   debug('API', Object.keys(api))
 
   const server = http.createServer((request, response) => {
+    debug(request.method, request.url)
     if (request.url === '/schema') {
       debug('Schema')
       response.writeHead(200, { 'Content-Type': 'application/json' })
@@ -74,7 +75,7 @@ async function FurverServer (api) {
 
         debug('Result', result)
 
-        const serialized = JSON.stringify(result)
+        const serialized = JSON.stringify(result) + '\n'
 
         response.writeHead(200, { 'Content-Type': 'application/json' })
         response.write(serialized)
@@ -91,18 +92,18 @@ async function FurverServer (api) {
     })
   })
 
-  const port = process.env.PORT
-
   return new Promise((resolve, reject) => {
     server.listen(port, () => {
       mustDebug(`Listening on port ${port}`)
-      resolve()
+      resolve(server)
     })
   })
 }
 
-function deepFreeze (object, name = '') {
-  if (isPrimitive(object)) return object
+function deepFreeze (object, name = '', frozen = new Set()) {
+  if (isPrimitive(object) || frozen.has(object)) {
+    return object
+  }
 
   try {
     Object.freeze(object)
@@ -111,8 +112,10 @@ function deepFreeze (object, name = '') {
     debugError('Cannot freeze', object)
   }
 
-  for (const name in object) {
-    deepFreeze(object[name], name)
+  frozen.add(object)
+
+  for (const key in object) {
+    deepFreeze(object[key], key, frozen)
   }
 
   return object

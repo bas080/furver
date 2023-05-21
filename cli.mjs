@@ -2,50 +2,13 @@
 
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
-import schema from './schema.mjs'
 import serve from './server.mjs'
 import path from 'node:path'
 import Debug from 'debug'
 
-const name = 'furver'
-process.title = name
+const debug = Debug('furver:cli')
 
-Debug.enable('*:start,*:error')
-
-const argv = yargs(hideBin(process.argv))
-  .usage('Usage: $0 [...modules] [options]')
-  .scriptName(name)
-  .option('verbose', {
-    alias: 'v',
-    type: 'boolean'
-  })
-  .option('exec', {
-    alias: 'e',
-    type: 'string'
-  })
-  .option('port', {
-    alias: 'p',
-    type: 'number',
-    default: process.env.PORT || 3000
-  })
-  .option('endpoint', {
-    type: 'string'
-  })
-  .option('repl', {
-    alias: 'r',
-    type: 'boolean',
-    description: 'Enable the repl.'
-  })
-  .option('schema', {
-    alias: 's',
-    type: 'boolean',
-    description: 'Output the API schema without running the server.'
-  })
-  .parse()
-
-if (argv.verbose) {
-  Debug.enable(`${name}*`)
-}
+const noop = () => {}
 
 async function createApi (modules) {
   const api = await modules.reduce(async (merged, filePath) => {
@@ -61,47 +24,125 @@ async function createApi (modules) {
   return api
 }
 
-async function main () {
-  const api = await createApi(argv._)
-
-  if (argv.schema) {
-    console.log(JSON.stringify(schema(api)))
-    process.exit()
-  }
-
-  process.env.PORT = argv.port
-
-  if (!argv.endpoint) {
-    if (argv.exec) {
-      const { exec } = await import('./lisp.mjs')
-
-      console.log(JSON.stringify(await exec(api, JSON.parse(argv.exec))))
-      process.exit()
-    }
-
-    await serve(api)
-  }
-
-  if (argv.endpoint) {
-    const { default: repl } = await import('./repl.mjs')
-    const FurverClient = await import('./client.mjs')
-
-    const api = await FurverClient.default({ endpoint: argv.endpoint })
-
-    if (argv.exec) {
-      console.log(JSON.stringify(await api.call(JSON.parse(argv.exec))))
-      process.exit()
-    }
-
-    repl(api.call)
-  }
-
-  if (argv.repl && !argv.endpoint) {
-    const { default: repl } = await import('./repl.mjs')
-    const { exec } = await import('./lisp.mjs')
-
-    repl(exec(api))
+function throws (cb) {
+  try {
+    cb()
+    return false
+  } catch (error) {
+    return true
   }
 }
 
-main()
+const name = 'furver'
+process.title = name
+
+Debug.enable('*:start,*:error')
+
+const argv = yargs(hideBin(process.argv))
+  .usage('Usage: $0 [command] [options..]')
+  .scriptName(name)
+  .env(name.toUpperCase())
+  .command('server <modules..>', 'start server', noop, async ({ modules, port }) => {
+    serve(modules, port)
+  })
+  .command('repl <modules..>', 'start a repl without server', noop, async ({ modules }) => {
+    const { default: repl } = await import('./repl.mjs')
+    const { exec } = await import('./lisp.mjs')
+
+    Object.keys(modules).forEach(key => {
+      if (!global[key]) {
+        const value = modules[key]
+
+        global[key] = value
+
+        if (isFunction(value)) { value.toJSON = () => key }
+      }
+    })
+
+    repl(async function awaitEval (cmd, context, filename, callback) {
+      const value = eval(cmd) // eslint-disable-line
+
+      if (isPromise(value)) { return callback(null, await value) }
+
+      callback(null, await exec(modules, value))
+    })
+  })
+  .command(['client [port|url]'], 'start client repl', noop, async ({ endpoint, port, url }) => {
+    const { default: repl } = await import('./repl.mjs')
+    const { default: FurverClient } = await import('./client.mjs')
+
+    const api = await FurverClient({ endpoint })
+
+    Object.keys(api).forEach(key => {
+      if (!global[key]) global[key] = api[key]
+    })
+
+    repl(async function awaitEval (cmd, context, filename, callback) {
+      const value = eval(cmd) // eslint-disable-line
+
+      if (isPromise(value)) { return callback(null, await value) }
+
+      callback(null, await api.call(value))
+    })
+  })
+  .command('schema [modules..]|[--port]|[--url]', 'print schema of api', noop, async ({ endpoint, modules, port, url }) => {
+    if (modules) {
+      const { default: schema } = await import('./schema.mjs')
+      console.log(JSON.stringify(schema(modules)))
+    } else {
+      const { default: FurverClient } = await import('./client.mjs')
+      const api = await FurverClient({ endpoint })
+
+      return console.log(JSON.stringify(await api.schema()))
+    }
+  })
+  .option('url', {
+    type: 'string',
+    check (x) {
+      return !throws(() => new URL(x))
+    }
+  })
+  .option('modules', {
+    description: 'Name or path to modules',
+    array: true,
+    type: 'string',
+    async coerce (x) {
+      return x && await createApi(x)
+    }
+  })
+  .option('verbose', {
+    alias: 'v',
+    type: 'boolean',
+    coerce (x) {
+      if (x) {
+        Debug.enable(`${name}*`)
+      }
+      return x
+    }
+  })
+  .option('port', {
+    alias: 'p',
+    type: 'number',
+    default: process.env.PORT || 3000,
+    check (x) {
+      return isNaN(Number(x))
+    }
+  })
+  .middleware((argv) => {
+    const { port, url } = argv
+
+    argv.endpoint = (isNaN(Number(port)))
+      ? url
+      : `http://localhost:${port}`
+  })
+  .parse()
+
+debug('Options', await argv)
+
+function isFunction (x) {
+  return typeof x === 'function'
+}
+
+function isPromise (x) {
+  return x && isFunction(x.then)
+}

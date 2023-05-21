@@ -27,12 +27,15 @@ const exec = curryN(2, async (env, expression) => {
     return expression
   }
 
-  const [operator, ...args] = expression
+  let [operator, ...args] = expression
 
   // If operator is an array, return its JSON value.
   if (Array.isArray(operator)) {
     return Promise.all(operator.map(exec(env)))
   }
+
+  // Use JSON value when toJSON is implemented.
+  if (operator?.toJSON) { operator = operator.toJSON() }
 
   if (operator === 'fn') {
     const [body] = args
