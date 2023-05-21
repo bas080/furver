@@ -84,7 +84,9 @@ const api = {
       message
     }
   })()),
-
+  alwaysThrows () {
+    throw new Error('Always Throws')
+  },
   method: withRequest(req => {
     return req.method
   }),

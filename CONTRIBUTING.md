@@ -7,7 +7,7 @@ Lists projects dependencies and the versions.
 ```bash bash
 npm --version  # Dependency management
 node --version # Testing and implementation
-bash --version # For usage examples
+bash --version | head -n 1 # For usage examples
 
 # Examples on how to use server
 curl --version | head -n 1 | cut -f -2 -d ' '
@@ -16,11 +16,6 @@ curl --version | head -n 1 | cut -f -2 -d ' '
 9.6.6
 v20.2.0
 GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)
-Copyright (C) 2019 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-
-This is free software; you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
 curl 7.68.0
 ```
 
@@ -41,14 +36,14 @@ git add package-lock.json
 ```
 ```
 
-removed 32 packages, and audited 371 packages in 1s
+removed 1 package, and audited 371 packages in 1s
 
 31 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
 
-up to date, audited 3 packages in 1s
+up to date, audited 3 packages in 922ms
 
 found 0 vulnerabilities
 
@@ -76,7 +71,7 @@ npm t -- -R classic
 > furver@0.1.1 test
 > tap *.test.mjs --no-cov -R classic
 
-cli.test.mjs .......................................... 4/4 1s
+cli.test.mjs .......................................... 4/4 2s
 client.test.mjs ..................................... 12/12
 debounce.test.mjs ..................................... 3/3
 lisp.test.mjs ....................................... 10/10
@@ -87,6 +82,17 @@ total ............................................... 43/43
   43 passing (2s)
 
   ok
+```
+
+## Audit
+
+Check if package is free of vulnerabilities.
+
+```bash bash
+npm audit
+```
+```
+found 0 vulnerabilities
 ```
 
 ## Formatting
@@ -110,7 +116,7 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 403 packages in 6s
+added 32 packages, removed 1 package, and audited 403 packages in 11s
 
 38 packages are looking for funding
   run `npm fund` for details

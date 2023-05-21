@@ -40,6 +40,36 @@ curl -G "http://localhost:$PORT" --data-urlencode body='["inc", 42]'
 > We use the `-G` and `--data-urlencode` to perform a GET request with properly
 > encoded JSON in the body query param.
 
+We also have some cases where the server returns a non 2xx response.
+
+Invalid JSON responds with a 400 (Bad Request) status:
+
+```bash bash
+curl "http://localhost:$PORT" -d '[operatorDoesNotExist]'
+```
+```
+Status: 400
+```
+
+When the function does not exist:
+
+```bash bash
+curl "http://localhost:$PORT" -d '["methodDoesNotExist"]'
+```
+```
+Status: 404
+```
+
+An error or promise rejection occurs in one or more functions will responds
+with a 500.
+
+```bash bash
+curl -v "http://localhost:$PORT" -d '["alwaysThrows"]'
+```
+```
+Status: 500
+```
+
 This demonstrates that the server has a very clear purpose, it is to receive
 a request, parse the furver lisp program and evaluate that program before
 sending it back to the http client.

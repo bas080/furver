@@ -3,6 +3,7 @@ import { exec } from './lisp.mjs'
 import _debug from './debug.mjs'
 import schema from './schema.mjs'
 import fs from 'node:fs'
+import { FurverExpressionError } from './error.mjs'
 
 const debug = _debug.extend('server')
 const mustDebug = debug.extend('start')
@@ -89,6 +90,10 @@ async function FurverServer (api, port) {
 
         debug('Response', serialized)
       } catch (error) {
+        if (error instanceof FurverExpressionError) {
+          error.status = 404
+        }
+
         debugError(error)
         error.status = error.status || 500
         response.writeHead(error.status, { 'Content-Type': 'text/plain' })

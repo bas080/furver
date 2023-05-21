@@ -7,7 +7,7 @@ Lists projects dependencies and the versions.
 ```bash bash
 npm --version  # Dependency management
 node --version # Testing and implementation
-bash --version # For usage examples
+bash --version | head -n 1 # For usage examples
 
 # Examples on how to use server
 curl --version | head -n 1 | cut -f -2 -d ' '
@@ -38,6 +38,14 @@ npm t -- -R classic
 
 # or with code coverage
 # npx c8 npm t
+```
+
+## Audit
+
+Check if package is free of vulnerabilities.
+
+```bash bash
+npm audit
 ```
 
 ## Formatting

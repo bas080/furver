@@ -31,14 +31,14 @@ test('Returns 400 when receiving malformed JSON data', async (t) => {
   t.end()
 })
 
-test('Returns 500 status', async (t) => {
+test('Returns 404 status', async (t) => {
   try {
     const res = await fetch(apiUri, {
       method: 'POST',
       body: JSON.stringify([]),
       headers: { 'Content-Type': 'application/json' }
     })
-    t.equal(res.status, 500, 'Status should be 500')
+    t.equal(res.status, 404, 'Status should be 404')
     t.end()
   } catch (error) {
     t.error(error)
