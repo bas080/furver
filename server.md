@@ -31,7 +31,7 @@ curl -X POST "http://localhost:$PORT" \
 And now for a get request example.
 
 ```bash bash
-curl -v -G "http://localhost:$PORT" --data-urlencode body='["inc", 42]'
+curl -G "http://localhost:$PORT" --data-urlencode body='["inc", 42]'
 ```
 ```
 43
@@ -51,7 +51,7 @@ sending it back to the http client.
 const port = Number(process.env.PORT) + 1;
 
 async function main() {
-  const { default: FurverServer } = await import('furver/server.mjs')
+  const { default: FurverServer } = await import('./server.mjs')
 
   const server = await FurverServer({
     hello: () => 'world'

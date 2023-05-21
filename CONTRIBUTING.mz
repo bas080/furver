@@ -23,9 +23,9 @@ First clone the project and then run `npm link`.
 
 ```bash bash
 npm install
-npm ci
 npm link
 npm link furver
+furver --version
 git add package-lock.json
 ```
 
@@ -52,7 +52,11 @@ npx standard || {
 ## Client Bundle
 
 ```bash bash
-npm run build
+set -euo pipefail
+
+npm install rollup @rollup/plugin-node-resolve @rollup/plugin-babel @rollup/plugin-commonjs @rollup/plugin-terser --no-save
+npx rollup ./client.mjs -o client.min.js -f iife -n furver -p node-resolve -p babel -p commonjs # -p terser
+
 git add ./client.min.js
 ```
 

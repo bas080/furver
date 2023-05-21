@@ -39,9 +39,15 @@ async function FurverServer (api, port) {
       return
     }
 
-    if (request.url === '/client') {
+    if (request.url === '/playground') {
+      debug('Serving playground')
+      fs.createReadStream('./example/index.html').pipe(response)
+      return
+    }
+
+    if (request.url === '/client.min.js') {
       debug('Serving client')
-      fs.createReadStream('./client.js').pipe(response)
+      fs.createReadStream('./client.min.js').pipe(response)
       return
     }
 

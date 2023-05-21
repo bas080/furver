@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Furver Playground</title>
+</head>
+<body>
+	<h1>Furver Playground</h1>
+  <p>Open your inspector with bla bla bla</p>
+
+	<script src="/client.min.js"></script>
+  <script>
+    furver({endpoint: '/'})
+      .then(api => window.api = api)
+      .catch(console.error)
+  </script>
+</body>
+</html>

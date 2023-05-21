@@ -11,7 +11,6 @@
   "scripts": {
     "start": "./cli.mjs",
     "dev": "npx nodemon ./cli.mjs",
-    "build": "babel ./client.mjs --presets=@babel/env > client.min.js",
     "test": "tap *.test.mjs --no-cov",
     "version": "markatzea CONTRIBUTING.mz > CONTRIBUTING.md && git add *.md",
     "docs": "PORT=8999 markatzea CONTRIBUTING.mz | tee CONTRIBUTING.md"
@@ -30,9 +29,6 @@
   "author": "Bas Huis",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.21.5",
-    "@babel/core": "^7.21.8",
-    "@babel/preset-env": "^7.21.5",
     "@jcubic/lips": "^0.20.3",
     "ramda": "^0.29.0",
     "tap": "^16.3.4"

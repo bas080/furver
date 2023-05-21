@@ -61,26 +61,14 @@ corresponds to the functions in the module.
 })()
 ```
 ```
-[ 'hello world', 'hello world', 'hello world' ]
+[ 'hello world', 1684641858075, '0.1.0' ]
 ```
 
-By default the server hosts a bundled version of the client at `./client.min.js`.
+By default the server hosts a bundled version of the client at `/client.min.js`.
 Using this file is optional.
 
-> TBD
-
-```html
-<script src="http://localhost:8999/client.js?jsonp=myFunction"></script>
-<script>
-  function myFunction(api) {
-    console.log(await Promise.all([
-      api.identity('hello world'),
-      api.timestamp(),
-      api.version()
-    ]))
-  }
-</script>
-```
+You can try this client in the playground by starting a furver server and
+opening `/playground` in your browser.
 
 [Read more about the client.](./client.md)
 

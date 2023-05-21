@@ -1,10 +1,11 @@
-import _debug from './debug.mjs'
+// TBD: re-introduce debug once bundling is solved
+// import _debug from './debug.mjs'
 import { debounceWithIndex } from './debounce.mjs'
 import { FurverInvalidSchemaError } from './error.mjs'
 
-const debug = _debug.extend('client')
-const debugError = debug.extend('error')
-const debugFetch = debug.extend('fetch')
+// const debug = _debug.extend('client')
+// const debugError = debug.extend('error')
+// const debugFetch = debug.extend('fetch')
 
 FurverClient.bulkPost = (config = {
   fetch
@@ -18,16 +19,20 @@ FurverClient.bulkPost = (config = {
     body
   }
 
-  debugFetch(url, _options)
+  // debugFetch(url, _options)
 
   const res = await fetch(url, _options)
 
   if (!res.ok) {
-    debugError(res)
+    // debugError(res)
     throw res
   }
 
-  return await res.json()
+  const json = await res.json()
+
+  // debug('Response', json)
+
+  return json
 }, 0)
 
 // TBD: Should keep support for get requests. Implement a get fetch.
@@ -44,7 +49,7 @@ FurverClient.bulkPost = (config = {
 // }
 
 FurverClient.schema = async function furverClientSchema (url) {
-  debug(`fetching schema from ${url}`)
+  // debug(`fetching schema from ${url}`)
   const schemaRes = await fetch(url)
   return await schemaRes.json()
 }
@@ -85,9 +90,12 @@ async function FurverClient ({
     method: 'post'
   })
 
-  debug('FurverClient initialized with endpoint', endpoint)
+  // debug('FurverClient initialized with endpoint', endpoint)
 
-  return assignMethods(await castFunction(schema)(`${endpoint}/schema`))
+  return assignMethods(await castFunction(schema)(endpoint === '/'
+    ? '/schema'
+    : `${endpoint}/schema`
+  ))
 }
 
 export default FurverClient

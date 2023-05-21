@@ -34,37 +34,31 @@ First clone the project and then run `npm link`.
 
 ```bash bash
 npm install
-npm ci
 npm link
 npm link furver
+furver --version
 git add package-lock.json
 ```
 ```
 
-removed 1 package, and audited 483 packages in 2s
+removed 32 packages, and audited 371 packages in 1s
 
-35 packages are looking for funding
+31 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
 
-added 320 packages, and audited 483 packages in 3s
+up to date, audited 3 packages in 1s
 
-35 packages are looking for funding
+found 0 vulnerabilities
+
+added 1 package, and audited 372 packages in 2s
+
+31 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
-
-up to date, audited 3 packages in 972ms
-
-found 0 vulnerabilities
-
-added 1 package, and audited 484 packages in 1s
-
-35 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
+0.1.0
 ```
 
 You should now be able to run the bin scripts and tests.
@@ -82,7 +76,7 @@ npm t -- -R classic
 > furver@0.1.0 test
 > tap *.test.mjs --no-cov -R classic
 
-cli.test.mjs .......................................... 4/4 1s
+cli.test.mjs .......................................... 4/4 2s
 client.test.mjs ..................................... 12/12
 debounce.test.mjs ..................................... 3/3
 lisp.test.mjs ....................................... 10/10
@@ -107,14 +101,21 @@ npx standard || {
 ## Client Bundle
 
 ```bash bash
-npm run build
+set -euo pipefail
+
+npm install rollup @rollup/plugin-node-resolve @rollup/plugin-babel @rollup/plugin-commonjs @rollup/plugin-terser --no-save
+npx rollup ./client.mjs -o client.min.js -f iife -n furver -p node-resolve -p babel -p commonjs # -p terser
+
 git add ./client.min.js
 ```
 ```
 
-> furver@0.1.0 build
-> babel ./client.mjs --presets=@babel/env > client.min.js
+added 32 packages, removed 1 package, and audited 403 packages in 9s
 
+38 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
 ```
 
 ## Documentation
