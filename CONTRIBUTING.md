@@ -41,23 +41,25 @@ git add package-lock.json
 ```
 ```
 
-removed 1 package, and audited 483 packages in 1s
+removed 1 package, and audited 483 packages in 2s
 
 35 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
 
-added 320 packages in 5s
+added 320 packages, and audited 483 packages in 3s
 
 35 packages are looking for funding
   run `npm fund` for details
 
-up to date, audited 3 packages in 1s
+found 0 vulnerabilities
+
+up to date, audited 3 packages in 972ms
 
 found 0 vulnerabilities
 
-added 1 package, and audited 484 packages in 2s
+added 1 package, and audited 484 packages in 1s
 
 35 packages are looking for funding
   run `npm fund` for details
@@ -77,7 +79,7 @@ npm t -- -R classic
 ```
 ```
 
-> furver@0.0.23 test
+> furver@0.1.0 test
 > tap *.test.mjs --no-cov -R classic
 
 cli.test.mjs .......................................... 4/4 1s
@@ -110,7 +112,7 @@ git add ./client.min.js
 ```
 ```
 
-> furver@0.0.23 build
+> furver@0.1.0 build
 > babel ./client.mjs --presets=@babel/env > client.min.js
 
 ```
