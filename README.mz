@@ -15,7 +15,7 @@ Lisp-like language for complex server-side operations.
 
 To use Furver, simply spin up a server.
 
-```bash bash | head -n 1
+```bash
 npx furver server ./example/api.mjs
 ```
 
