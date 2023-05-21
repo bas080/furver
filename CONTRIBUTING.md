@@ -58,7 +58,7 @@ added 1 package, and audited 372 packages in 2s
   run `npm fund` for details
 
 found 0 vulnerabilities
-0.1.0
+0.1.1
 ```
 
 You should now be able to run the bin scripts and tests.
@@ -73,10 +73,10 @@ npm t -- -R classic
 ```
 ```
 
-> furver@0.1.0 test
+> furver@0.1.1 test
 > tap *.test.mjs --no-cov -R classic
 
-cli.test.mjs .......................................... 4/4 2s
+cli.test.mjs .......................................... 4/4 1s
 client.test.mjs ..................................... 12/12
 debounce.test.mjs ..................................... 3/3
 lisp.test.mjs ....................................... 10/10
@@ -110,7 +110,7 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 403 packages in 9s
+added 32 packages, removed 1 package, and audited 403 packages in 6s
 
 38 packages are looking for funding
   run `npm fund` for details

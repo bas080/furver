@@ -25,7 +25,7 @@ Lisp-like language for complex server-side operations.
 
 To use Furver, simply spin up a server.
 
-```bash bash | head -n 1
+```bash
 npx furver server ./example/api.mjs
 ```
 
@@ -61,7 +61,7 @@ corresponds to the functions in the module.
 })()
 ```
 ```
-[ 'hello world', 1684641858075, '0.1.0' ]
+[ 'hello world', 1684642200161, '0.1.1' ]
 ```
 
 By default the server hosts a bundled version of the client at `/client.min.js`.
