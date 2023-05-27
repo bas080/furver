@@ -2,7 +2,7 @@
 
 Furver is a minimal RPC solution that uses JSON and Node.js. Turn any
 JavaScript module into into a simple to use client API that is easy to learn
-while also expressive enought for advanced use-cases.
+while also expressive enough for advanced use-cases.
 
 [![NPM](https://img.shields.io/npm/v/furver?color=blue&style=flat-square)](https://www.npmjs.com/package/furver)
 [![NPM Downloads](https://img.shields.io/npm/dm/furver?style=flat-square)](https://www.npmjs.com/package/furver)
@@ -89,9 +89,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```
-[ 'hello world', 1684716244609, '0.1.1' ]
-[ 'hello world', 1684716244614, '0.1.1' ]
-[ 'hello world', 1684716244618, '0.1.1' ]
+[ 'hello world', 1685200096174, '0.1.1' ]
+[ 'hello world', 1685200096179, '0.1.1' ]
+[ 'hello world', 1685200096183, '0.1.1' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program

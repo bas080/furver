@@ -21,12 +21,10 @@ Other:
 
 First clone the project and then run `npm link`.
 
-```bash bash
-npm install
+```bash bash &> /dev/null
+npm ci
 npm link
-npm link furver
 furver --version
-git add package-lock.json
 ```
 
 You should now be able to run the bin scripts and tests.
@@ -51,10 +49,7 @@ npm audit
 ## Formatting
 
 ```bash bash
-npx standard || {
-  npx standard --fix
-  exit 1
-}
+npx standard
 ```
 
 ## Client Bundle

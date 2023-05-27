@@ -2,7 +2,7 @@
 
 Furver is a minimal RPC solution that uses JSON and Node.js. Turn any
 JavaScript module into into a simple to use client API that is easy to learn
-while also expressive enought for advanced use-cases.
+while also expressive enough for advanced use-cases.
 
 [![NPM](https://img.shields.io/npm/v/furver?color=blue&style=flat-square)](https://www.npmjs.com/package/furver)
 [![NPM Downloads](https://img.shields.io/npm/dm/furver?style=flat-square)](https://www.npmjs.com/package/furver)

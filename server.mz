@@ -8,6 +8,8 @@ The furver server module has the following features:
     a body.
 - A helper (`withRequest`) for defining api methods that have access to the
   request object.
+- A helper (`withConfig`) that allows to configure onRequest, onError and
+  onResponse lifecycle methods.
 
 ## Request examples
 
@@ -83,6 +85,57 @@ async function main() {
 }
 main()
 ```
+
+## withConfig
+
+`import { withConfig } from 'furver/server.mjs'`
+
+The `withConfig` function is completely optional and used to define behavior
+that is performed on every request, response or error. Simply wrap the exported
+object of the module with this function and provide the methods you would like
+to be called.
+
+```js
+const option = {
+  onResponse(req, res, result) { },
+  onRequest(req, res) { },
+  onError(req, res, error) { },
+}
+
+const api = {
+  add(a, b) { return a + b; },
+  // ...
+}
+
+export default withConfig(option, api)
+```
+
+> All methods are `await`ed which allows for async behavior.
+
+### option.onResponse
+
+When defined, this method will override the response behavior and instead use
+the behavior defined in this method.
+
+An example of simple response behavior.
+
+```js
+onResponse: (req, res, result) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.write(JSON.stringify(result))
+  res.end()
+}
+```
+
+### option.onRequest
+
+Does not override any functionality and is simply called. You could set values
+on the request object which are later used in other functions.
+
+### option.onError
+
+When defined, it overides the error response. It behaves similarly to `option.onResponse`.
+
 
 ## withRequest
 

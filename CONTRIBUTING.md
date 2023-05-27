@@ -27,33 +27,10 @@ Other:
 
 First clone the project and then run `npm link`.
 
-```bash bash
-npm install
+```bash bash &> /dev/null
+npm ci
 npm link
-npm link furver
 furver --version
-git add package-lock.json
-```
-```
-
-removed 1 package, and audited 371 packages in 1s
-
-31 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-
-up to date, audited 3 packages in 922ms
-
-found 0 vulnerabilities
-
-added 1 package, and audited 372 packages in 2s
-
-31 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-0.1.1
 ```
 
 You should now be able to run the bin scripts and tests.
@@ -71,15 +48,15 @@ npm t -- -R classic
 > furver@0.1.1 test
 > tap *.test.mjs --no-cov -R classic
 
-cli.test.mjs .......................................... 4/4 2s
+cli.test.mjs .......................................... 4/4 1s
 client.test.mjs ..................................... 12/12
 debounce.test.mjs ..................................... 3/3
 lisp.test.mjs ....................................... 10/10
 promises.test.mjs ................................... 10/10
-server.test.mjs ....................................... 4/4
-total ............................................... 43/43
+server.test.mjs ..................................... 10/10
+total ............................................... 49/49
 
-  43 passing (2s)
+  49 passing (2s)
 
   ok
 ```
@@ -98,10 +75,7 @@ found 0 vulnerabilities
 ## Formatting
 
 ```bash bash
-npx standard || {
-  npx standard --fix
-  exit 1
-}
+npx standard
 ```
 
 ## Client Bundle
@@ -116,7 +90,7 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 403 packages in 11s
+up to date, audited 403 packages in 3s
 
 38 packages are looking for funding
   run `npm fund` for details

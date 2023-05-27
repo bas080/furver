@@ -1,5 +1,6 @@
 import tap from 'tap'
 import { spawn } from 'node:child_process'
+import { server, withConfig } from './server.mjs'
 
 const { test } = tap
 
@@ -63,4 +64,62 @@ test('Test 200 status', async (t) => {
   const responseBody = await res.json()
   t.same(responseBody, expectedResponse)
   t.end()
+})
+
+test('withConfig helper', async (t) => {
+  t.plan(6)
+
+  const tPort = port + 1
+  const apiUri = `http://localhost:${tPort}`
+
+  const api = {
+    add: (a, b) => a + b
+  }
+
+  const config = {
+    onRequest (request) {
+      t.pass('Called onRequest')
+    },
+    onError (request, response, error) {
+      t.pass('Called onError')
+      response.writeHead(500)
+      response.end()
+    },
+    onResponse (request, response, result) {
+      t.pass('Called onResponse')
+      response.writeHead(200, { 'Content-Type': 'application/json' })
+      response.write(JSON.stringify(result))
+      response.end()
+    }
+  }
+
+  // Create a new API with the custom configuration
+  const apiWithConfig = withConfig(config, api)
+
+  // Start the server with the new API
+  const instance = await server(apiWithConfig, tPort)
+
+  // Send a request to the server
+  const requestData = [[['add', 1, 2]]]
+  const expectedResponse = [3]
+
+  await fetch(apiUri, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: 'not a valid JSON string'
+  })
+
+  const res = await fetch(apiUri, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestData)
+  })
+
+  // Verify the response status code and body
+  t.equal(res.status, 200)
+  const responseBody = await res.json()
+  t.same(responseBody, expectedResponse)
+
+  // Stop the server
+  instance.close()
 })
