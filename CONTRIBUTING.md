@@ -45,7 +45,7 @@ npm t -- -R classic
 ```
 ```
 
-> furver@0.1.1 test
+> furver@0.2.0 test
 > tap *.test.mjs --no-cov -R classic
 
 cli.test.mjs .......................................... 4/4 1s
@@ -90,7 +90,7 @@ git add ./client.min.js
 ```
 ```
 
-up to date, audited 403 packages in 3s
+up to date, audited 403 packages in 8s
 
 38 packages are looking for funding
   run `npm fund` for details
