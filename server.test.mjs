@@ -15,6 +15,14 @@ tap.before(async () => {
 
   // Wait for the server to start listening on the port
   await new Promise((resolve) => serverProcess.stderr.once('data', resolve))
+
+  // Listen for the serverProcess exit event
+  serverProcess.once('exit', (code) => {
+    if (code !== 0) {
+      console.error(`Server process exited with code ${code}`)
+      process.exit(code)
+    }
+  })
 })
 
 tap.teardown(() => serverProcess.kill())
