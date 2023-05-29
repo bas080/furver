@@ -89,9 +89,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```
-[ 'hello world', 1685290188190, '0.2.0' ]
-[ 'hello world', 1685290188196, '0.2.0' ]
-[ 'hello world', 1685290188199, '0.2.0' ]
+[ 'hello world', 1685325565096, '0.2.0' ]
+[ 'hello world', 1685325565102, '0.2.0' ]
+[ 'hello world', 1685325565105, '0.2.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program

@@ -49,15 +49,15 @@ npm t -- -R classic
 > tap *.test.mjs --no-cov -R classic
 
 cli.test.mjs .......................................... 4/4 1s
-client.test.mjs ..................................... 12/12
+client.test.mjs ..................................... 16/16
 curry.test.mjs ........................................ 4/4
 debounce.test.mjs ..................................... 3/3
 lisp.test.mjs ....................................... 10/10
 promises.test.mjs ................................... 10/10
 server.test.mjs ..................................... 10/10
-total ............................................... 53/53
+total ............................................... 57/57
 
-  53 passing (2s)
+  57 passing (2s)
 
   ok
 ```
@@ -91,7 +91,7 @@ git add ./client.min.js
 ```
 ```
 
-up to date, audited 403 packages in 2s
+up to date, audited 403 packages in 12s
 
 38 packages are looking for funding
   run `npm fund` for details
