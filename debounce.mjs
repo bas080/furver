@@ -1,6 +1,6 @@
 import { promises } from './promises.mjs'
 
-export function debounce (callback, milliseconds) {
+export function debounce (callback, milliseconds = 0) {
   const { resolve, reject, promise } = promises()
 
   let timeout
@@ -27,7 +27,7 @@ export function debounce (callback, milliseconds) {
   return innerDebounce
 }
 
-export function debounceWithIndex (callback, milliseconds) {
+export function debounceWithIndex (callback, milliseconds = 0) {
   const innerDebounce = debounce(callback, milliseconds)
 
   return async (...args) => {
