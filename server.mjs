@@ -55,7 +55,7 @@ async function server (api, port) {
 
     if (request.url === '/playground') {
       debug('Serving playground')
-      fs.createReadStream('./example/index.html').pipe(response)
+      fs.createReadStream('./playground.html').pipe(response)
       return
     }
 
