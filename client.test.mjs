@@ -81,11 +81,10 @@ test('client', async (t) => {
     t.type(api.call, 'function')
   })
 
-  t.test('invokes API endpoints with correct arguments using `post` method', async (t) => {
+  t.test('invokes API endpoints with correct arguments', async (t) => {
     const schema = [['add', 2]]
     const expr = ['add', 2, 3]
     const fetch = async (url, options) => {
-      t.equal(options.method, 'post')
       t.match(options.body, expr)
       t.end()
 
