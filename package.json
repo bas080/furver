@@ -30,7 +30,7 @@
     "server"
   ],
   "author": "Bas Huis",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@jcubic/lips": "^0.20.3",
     "ramda": "^0.29.0",
