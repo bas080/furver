@@ -9,7 +9,7 @@
   "main": "index.mjs",
   "repository": {
     "type": "git",
-    "url": "git@github.com:bas081/furver.git"
+    "url": "git@github.com:bas080/furver.git"
   },
   "scripts": {
     "start": "./cli.mjs",
