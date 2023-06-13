@@ -14,7 +14,7 @@
   "scripts": {
     "start": "./cli.mjs",
     "dev": "npx nodemon ./cli.mjs",
-    "test": "tap *.test.mjs --no-cov",
+    "test": "tap -j 1 *.test.mjs --no-cov",
     "version": "markatzea CONTRIBUTING.mz > CONTRIBUTING.md && git add *.md",
     "docs": "PORT=8999 markatzea CONTRIBUTING.mz | tee CONTRIBUTING.md"
   },

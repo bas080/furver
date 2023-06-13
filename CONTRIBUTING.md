@@ -4,7 +4,7 @@
 
 Lists projects dependencies and the versions.
 
-```bash bash
+```bash
 npm --version  # Dependency management
 node --version # Testing and implementation
 bash --version | head -n 1 # For usage examples
@@ -13,8 +13,8 @@ bash --version | head -n 1 # For usage examples
 curl --version | head -n 1 | cut -f -2 -d ' '
 ```
 ```
-9.6.6
-v20.2.0
+9.6.7
+v20.3.0
 GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)
 curl 7.68.0
 ```
@@ -27,7 +27,7 @@ Other:
 
 First clone the project and then run `npm link`.
 
-```bash bash &> /dev/null
+```bash
 npm ci
 npm link
 furver --version
@@ -37,7 +37,7 @@ You should now be able to run the bin scripts and tests.
 
 ## Tests
 
-```bash bash
+```bash
 npm t -- -R classic
 
 # or with code coverage
@@ -46,18 +46,18 @@ npm t -- -R classic
 ```
 
 > furver@0.3.1 test
-> tap *.test.mjs --no-cov -R classic
+> tap -j 1 *.test.mjs --no-cov -R classic
 
-cli.test.mjs .......................................... 4/4 1s
+cli.test.mjs .......................................... 4/4 2s
 client.test.mjs ..................................... 15/15
 curry.test.mjs ........................................ 4/4
 debounce.test.mjs ..................................... 3/3
+http.test.mjs ....................................... 10/10
 lisp.test.mjs ....................................... 10/10
 promises.test.mjs ................................... 10/10
-server.test.mjs ..................................... 10/10
 total ............................................... 56/56
 
-  56 passing (2s)
+  56 passing (5s)
 
   ok
 ```
@@ -66,7 +66,7 @@ total ............................................... 56/56
 
 Check if package is free of vulnerabilities.
 
-```bash bash
+```bash
 npm audit
 ```
 ```
@@ -75,13 +75,13 @@ found 0 vulnerabilities
 
 ## Formatting
 
-```bash bash
+```bash
 npx standard
 ```
 
 ## Client Bundle
 
-```bash bash
+```bash
 set -euo pipefail
 
 npm install rollup @rollup/plugin-node-resolve @rollup/plugin-babel @rollup/plugin-commonjs @rollup/plugin-terser --no-save
@@ -91,7 +91,7 @@ git add ./client.min.js
 ```
 ```
 
-changed 1 package, and audited 403 packages in 10s
+up to date, audited 403 packages in 6s
 
 38 packages are looking for funding
   run `npm fund` for details
@@ -101,7 +101,7 @@ found 0 vulnerabilities
 
 ## Documentation
 
-```bash bash
+```bash
 set -euo pipefail
 
 # Spawn a server to demonstrate examples.
@@ -141,7 +141,7 @@ Generating docs for: server.mz > server.md
 The [changelog][changelog] is generated using the useful
 [auto-changelog][auto-changelog] project.
 
-```bash bash > /dev/null
+```bash
 npx auto-changelog -p
 ```
 

@@ -68,7 +68,7 @@ sending it back to the http client.
 const port = Number(process.env.PORT) + 1;
 
 async function main() {
-  const { default: FurverServer } = await import('./server.mjs')
+  const { default: FurverServer } = await import('./http.mjs')
 
   const server = await FurverServer({
     hello: () => 'world'

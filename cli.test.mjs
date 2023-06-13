@@ -3,6 +3,8 @@ import { spawn } from 'child_process'
 
 const bin = './cli.mjs'
 
+process.env.DEBUG = '*'
+
 test('run server with default port', (t) => {
   const child = spawn(bin, ['server', './example/api.mjs'])
 

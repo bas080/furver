@@ -1,6 +1,7 @@
 import tap from 'tap'
 import { spawn } from 'node:child_process'
-import { server, withConfig } from './server.mjs'
+import { withConfig } from './server.mjs'
+import { server } from './http.mjs'
 
 const { test } = tap
 
@@ -11,7 +12,12 @@ const apiUri = `http://localhost:${port}`
 
 tap.before(async () => {
   // Start the server in a child process
-  serverProcess = spawn('node', ['./cli.mjs', 'server', './example/api.mjs', '--port', port])
+  serverProcess = spawn('node', ['./cli.mjs', 'server', './example/api.mjs', '--port', port], {
+    env: {
+      ...process.env,
+      DEBUG: '*'
+    }
+  })
 
   // Wait for the server to start listening on the port
   await new Promise((resolve) => serverProcess.stderr.once('data', resolve))
@@ -115,6 +121,12 @@ test('withConfig helper', async (t) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: 'not a valid JSON string'
+  })
+
+  await fetch(apiUri, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: '["DoesNotExist"]'
   })
 
   const res = await fetch(apiUri, {

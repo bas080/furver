@@ -2,7 +2,7 @@
 
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
-import serve from './server.mjs'
+import serve from './http.mjs'
 import path from 'node:path'
 import Debug from 'debug'
 
@@ -36,7 +36,7 @@ function throws (cb) {
 const name = 'furver'
 process.title = name
 
-Debug.enable('*:start,*:error')
+// Debug.enable('*:start,*:error')
 
 const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 [command] [options..]')

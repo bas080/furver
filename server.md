@@ -19,7 +19,7 @@ library selected as a module.
 Let's look at a simple curl example. We'll use the `inc` function to
 confirm that the lisp is evaluated.
 
-```bash bash
+```bash
 curl -X POST "http://localhost:$PORT" \
   -d '["inc", 41]'
 ```
@@ -32,7 +32,7 @@ curl -X POST "http://localhost:$PORT" \
 
 And now for a get request example.
 
-```bash bash
+```bash
 curl -G "http://localhost:$PORT" --data-urlencode body='["inc", 42]'
 ```
 ```
@@ -46,7 +46,7 @@ We also have some cases where the server returns a non 2xx response.
 
 Invalid JSON responds with a 400 (Bad Request) status:
 
-```bash bash
+```bash
 curl "http://localhost:$PORT" -d '[operatorDoesNotExist]'
 ```
 ```
@@ -55,7 +55,7 @@ Status: 400
 
 When the function does not exist:
 
-```bash bash
+```bash
 curl "http://localhost:$PORT" -d '["methodDoesNotExist"]'
 ```
 ```
@@ -65,7 +65,7 @@ Status: 404
 An error or promise rejection occurs in one or more functions will responds
 with a 500.
 
-```bash bash
+```bash
 curl -v "http://localhost:$PORT" -d '["alwaysThrows"]'
 ```
 ```
@@ -79,11 +79,11 @@ sending it back to the http client.
 ## FurverServer
 
 
-```node node
+```node
 const port = Number(process.env.PORT) + 1;
 
 async function main() {
-  const { default: FurverServer } = await import('./server.mjs')
+  const { default: FurverServer } = await import('./http.mjs')
 
   const server = await FurverServer({
     hello: () => 'world'
@@ -191,7 +191,7 @@ const server = await FurverServer(api);
 
 The example server has a function for getting the request method.
 
-```bash bash
+```bash
 curl -X PATCH "http://localhost:$PORT" -d '["method"]'
 ```
 ```

@@ -65,7 +65,7 @@ Here an working example of the JavaScript client.
 
 ### JavaScript
 
-```js node
+```javascript
 (async function() {
   const { default: FurverClient } = await import('./client.mjs')
 
@@ -88,10 +88,10 @@ Here an working example of the JavaScript client.
   console.log(await api.call([[[identity, 'hello world'], [timestamp], [version]]]))
 })()
 ```
-```
-[ 'hello world', 1686258726354, '0.3.1' ]
-[ 'hello world', 1686258726360, '0.3.1' ]
-[ 'hello world', 1686258726362, '0.3.1' ]
+```javascript
+[ 'hello world', 1686775828197, '0.3.1' ]
+[ 'hello world', 1686775828202, '0.3.1' ]
+[ 'hello world', 1686775828206, '0.3.1' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
@@ -134,7 +134,7 @@ Furver's Lisp-like language allows developers to perform complex aggregations
 and operations in a single request. For example, to create and get an invoice
 in a single request:
 
-```javascript node
+```javascript
 (async function() {
   const { default: FurverClient } = await import('./client.mjs')
 
@@ -157,7 +157,7 @@ in a single request:
   console.log(await api.call(createAndGetInvoice))
 })()
 ```
-```
+```javascript
 { amount: 42, customerId: 1 }
 { amount: 42, customerId: 1 }
 ```
@@ -175,7 +175,7 @@ function that depends on the return value of the previous function.
 The goal of Furver's cli is to provide you with all the tools to use, test and
 debug Furver servers.
 
-```bash bash
+```bash
 furver --help
 ```
 ```

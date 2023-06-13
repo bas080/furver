@@ -49,7 +49,7 @@ Here an working example of the JavaScript client.
 
 ### JavaScript
 
-```js node
+```javascript|javascript node
 (async function() {
   const { default: FurverClient } = await import('./client.mjs')
 
@@ -113,7 +113,7 @@ Furver's Lisp-like language allows developers to perform complex aggregations
 and operations in a single request. For example, to create and get an invoice
 in a single request:
 
-```javascript node
+```javascript|javascript node
 (async function() {
   const { default: FurverClient } = await import('./client.mjs')
 
