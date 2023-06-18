@@ -20,8 +20,12 @@ const withConfig = curry((config, api) => {
   return api
 })
 
+const array = (...args) => args
+
 function server (api) {
   debug('API config: ', Boolean(api[furverSymbol]))
+
+  api.array = api.array || array
 
   const {
     onRequest,

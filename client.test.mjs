@@ -109,13 +109,12 @@ test('client', async (t) => {
   })
 
   test('bulk', async (t) => {
-    // TODO: FIX BUG WHEN debounce FN is not a promise (deferred operation)
-    const identity = async (a, { body }) => {
-      return await JSON.parse(body)[0] // [0] omdat het geen lisp is.
-    }
+    // Fake a response from the server.
+    const identity = (a, { body }) => {
+      const [, ...result] = JSON.parse(body)
 
-    //
-    // const identity = async (a, { body }) => new Promise(resolve => resolve(JSON.parse(body)))
+      return result
+    }
 
     const fn = bulk(identity)
 

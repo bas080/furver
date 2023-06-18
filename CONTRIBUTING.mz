@@ -105,3 +105,4 @@ npx auto-changelog -p
 
 [changelog]:./CHANGELOG.md
 [auto-changelog]:https://www.npmjs.com/package/auto-changelog
+[markatzea]:https://github.com/bas080/markatzea

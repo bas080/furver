@@ -61,7 +61,7 @@ test('Returns 404 status', async (t) => {
 })
 
 test('Test 200 status', async (t) => {
-  const requestData = [[['add', 1, 2]]]
+  const requestData = ['array', ['add', 1, 2]]
   const expectedResponse = [3]
 
   // Send a POST request with valid JSON data
@@ -114,7 +114,7 @@ test('withConfig helper', async (t) => {
   const instance = await server(apiWithConfig, tPort)
 
   // Send a request to the server
-  const requestData = [[['add', 1, 2]]]
+  const requestData = ['array', ['add', 1, 2]]
   const expectedResponse = [3]
 
   await fetch(apiUri, {

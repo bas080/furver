@@ -11,7 +11,7 @@ import { FurverInvalidSchemaError } from './error.mjs'
 
 const bulk = fetchFn => debounceWithIndex(calls => {
   const [[url, options]] = calls
-  const body = JSON.stringify([calls.map(([, { body }]) => body)])
+  const body = JSON.stringify(['array', ...calls.map(([, { body }]) => body)])
 
   return fetchFn(url, {
     ...options,

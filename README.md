@@ -81,17 +81,17 @@ Here an working example of the JavaScript client.
   ]))
 
   // We can write the same query using the JSON Lisp
-  console.log(await api.call([[['identity', 'hello world'], ['timestamp'], ['version']]]))
+  console.log(await api.call(['array', ['identity', 'hello world'], ['timestamp'], ['version']]))
 
   // Those are many quotes, we can reduce it by using the function reference.
   const { identity, timestamp, version } = api
-  console.log(await api.call([[[identity, 'hello world'], [timestamp], [version]]]))
+  console.log(await api.call(['array', [identity, 'hello world'], [timestamp], [version]]))
 })()
 ```
 ```javascript
-[ 'hello world', 1686775828197, '0.3.1' ]
-[ 'hello world', 1686775828202, '0.3.1' ]
-[ 'hello world', 1686775828206, '0.3.1' ]
+[ 'hello world', 1687103517672, '0.3.1' ]
+[ 'hello world', 1687103517678, '0.3.1' ]
+[ 'hello world', 1687103517681, '0.3.1' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program

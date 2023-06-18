@@ -17,6 +17,16 @@ test('should evaluate basic expressions correctly', (t) => {
     .then((result) => t.equal(result, 5, '10 / 2 = 5'))
 })
 
+test('should be able to call a partially applied function', async t => {
+  const env = {
+    '+': a => b => a + b
+  }
+
+  t.equal(typeof (await exec(env, ['+', 1])), 'function')
+  t.equal(await exec(env, [['+', 1], 2]), 3)
+  t.end()
+})
+
 test('should handle let expressions', (t) => {
   t.plan(1)
 
@@ -58,8 +68,11 @@ test('should evaluate nested expressions correctly', (t) => {
 test('should concatenate two arrays', async t => {
   t.plan(1)
 
-  const env = { concat: (a, b) => a.concat(b) }
-  const expression = ['concat', [[1, 2, 3]], [[4, 5, 6]]]
+  const env = {
+    array: (...args) => args,
+    concat: (a, b) => a.concat(b)
+  }
+  const expression = ['concat', ['array', 1, 2, 3], ['array', 4, 5, 6]]
   const result = await exec(env, expression)
 
   t.same(result, [1, 2, 3, 4, 5, 6])

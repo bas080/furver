@@ -1,26 +1,13 @@
 import _debug from './debug.mjs'
 import { FurverExpressionError } from './error.mjs'
+import curry from './curry.mjs'
 
 const debug = _debug.extend('lisp')
 const debugError = debug.extend('error')
-
-const curryN = (n, fn) => {
-  const arity = n || fn.length
-  return function curried (...args) {
-    if (args.length >= arity) {
-      return fn.call(this, ...args)
-    }
-    return (...newArgs) => curried.call(this, ...args, ...newArgs)
-  }
-}
-
 const isFunction = x => typeof x === 'function'
+const castFunction = x => isFunction(x) ? x : () => x
 
-function castFunction (x) {
-  return isFunction(x) ? x : () => x
-}
-
-const exec = curryN(2, async (env, expression) => {
+const exec = curry(async (env, expression) => {
   debug('exec', expression)
 
   if (!Array.isArray(expression)) {
@@ -29,9 +16,14 @@ const exec = curryN(2, async (env, expression) => {
 
   let [operator, ...args] = expression
 
-  // If operator is an array, return its JSON value.
-  if (Array.isArray(operator)) {
-    return Promise.all(operator.map(exec(env)))
+  // Yey, resolved and all and ready to call.
+  if (isFunction(operator)) {
+    try {
+      return await operator.call(env, ...(await Promise.all(args.map(exec(env)))))
+    } catch (error) {
+      debugError(error)
+      throw error
+    }
   }
 
   // Use JSON value when toJSON is implemented.
@@ -54,21 +46,18 @@ const exec = curryN(2, async (env, expression) => {
     return exec(letEnv, letBody)
   }
 
-  // Throw error if operator is not in env.
+  if (Array.isArray(operator)) {
+    return exec(env, [await exec(env, operator), ...args])
+  }
+
+  // Throw error if operator is not in env or is not a function
   if (!(operator in env)) {
     const error = new FurverExpressionError(`Unknown expression: ${operator}`)
     debugError(error)
     throw error
   }
 
-  const fn = castFunction(env[operator])
-
-  try {
-    return await fn.call(env, ...(await Promise.all(args.map(exec(env)))))
-  } catch (error) {
-    debugError(error)
-    throw error
-  }
+  return exec(env, [castFunction(env[operator]), ...args])
 })
 
 export { exec }

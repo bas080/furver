@@ -53,11 +53,11 @@ client.test.mjs ..................................... 15/15
 curry.test.mjs ........................................ 4/4
 debounce.test.mjs ..................................... 3/3
 http.test.mjs ....................................... 10/10
-lisp.test.mjs ....................................... 10/10
+lisp.test.mjs ....................................... 12/12
 promises.test.mjs ................................... 10/10
-total ............................................... 56/56
+total ............................................... 58/58
 
-  56 passing (5s)
+  58 passing (5s)
 
   ok
 ```
@@ -91,7 +91,7 @@ git add ./client.min.js
 ```
 ```
 
-up to date, audited 403 packages in 6s
+up to date, audited 403 packages in 973ms
 
 38 packages are looking for funding
   run `npm fund` for details
@@ -147,3 +147,4 @@ npx auto-changelog -p
 
 [changelog]:./CHANGELOG.md
 [auto-changelog]:https://www.npmjs.com/package/auto-changelog
+[markatzea]:https://github.com/bas080/markatzea
