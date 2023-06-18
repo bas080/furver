@@ -90,10 +90,10 @@ const argv = yargs(hideBin(process.argv))
       const { default: schema } = await import('./schema.mjs')
       console.log(JSON.stringify(schema(modules)))
     } else {
-      const { default: FurverClient } = await import('./client.mjs')
+      const { default: FurverClient, schema } = await import('./client.mjs')
       const api = await FurverClient({ endpoint })
 
-      return console.log(JSON.stringify(await api.schema()))
+      return console.log(JSON.stringify(await schema(api)))
     }
   })
   .option('url', {

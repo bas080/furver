@@ -1,7 +1,7 @@
 // client.test.mjs
 
 import { test } from 'tap'
-import { client, bulk /* get, post */ } from './client.mjs'
+import { client, bulk, schema /* get, post */ } from './client.mjs'
 import { FurverInvalidSchemaError } from './error.mjs'
 
 test('client', async (t) => {
@@ -54,7 +54,7 @@ test('client', async (t) => {
     }
     const schema = [['add', 2]]
     const api = await client({ fetch, schema })
-    t.has(api, { add: api.add })
+    t.equal(typeof api.add, 'function')
   })
 
   // Could add to improve debugging.
@@ -62,17 +62,6 @@ test('client', async (t) => {
     const schema = Promise.reject(new Error())
     await t.rejects(() => client({ schema, fetch }))
   })
-
-  // NO NEED TO HANDLE THE INCORRECT USE OF FURVER.
-  // t.test('handles invalid response format', async (t) => {
-  //   const schema = [['add', 2]]
-  //   const fetch = async () => {
-  //     return { ok: true, json: async () => ({ result: 5 }) }
-  //   }
-
-  //   const api = await client({ schema, fetch })
-  //   await t.rejects(() => api.add(2, 3))
-  // })
 
   t.test('resolves to an object with `call` method', async (t) => {
     const schema = [['add', 2]]
@@ -95,7 +84,7 @@ test('client', async (t) => {
     await api.call(expr)
   })
 
-  test('handles invalid response format', async (t) => {
+  t.test('handles invalid response format', async (t) => {
     const schema = { add: 2 }
     const fetch = async () => {
       return { ok: true, json: async () => ({ result: 5 }) }
@@ -108,7 +97,7 @@ test('client', async (t) => {
     }
   })
 
-  test('bulk', async (t) => {
+  t.test('bulk', async (t) => {
     // Fake a response from the server.
     const identity = (a, { body }) => {
       const [, ...result] = JSON.parse(body)
@@ -127,6 +116,17 @@ test('client', async (t) => {
     t.same(a, 1)
     t.same(b, 2)
     t.same(c, 3)
+  })
+
+  t.test('get api schema', async t => {
+    const mySchema = [['foo', 1], ['bar', 2]]
+    const config = {
+      schema: () => mySchema
+    }
+    const api = await client(config)
+
+    t.equal(schema(api), mySchema)
+    t.end()
   })
 
   // TODO: test('get', async (t) => { })

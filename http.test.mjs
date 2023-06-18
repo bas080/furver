@@ -24,6 +24,7 @@ tap.before(async () => {
 
   // Listen for the serverProcess exit event
   serverProcess.once('exit', (code) => {
+    code = code || 0
     if (code !== 0) {
       console.error(`Server process exited with code ${code}`)
       process.exit(code)

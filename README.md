@@ -89,9 +89,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1687104107623, '1.0.0' ]
-[ 'hello world', 1687104107629, '1.0.0' ]
-[ 'hello world', 1687104107632, '1.0.0' ]
+[ 'hello world', 1687130865800, '1.0.0' ]
+[ 'hello world', 1687130865806, '1.0.0' ]
+[ 'hello world', 1687130865809, '1.0.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
@@ -136,9 +136,9 @@ in a single request:
 
 ```javascript
 (async function() {
-  const { default: FurverClient } = await import('./client.mjs')
+  const { default: client } = await import('./client.mjs')
 
-  const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
+  const api = await client({endpoint: `http://localhost:${process.env.PORT}`})
 
   const { invoiceById, createInvoice } = api
 

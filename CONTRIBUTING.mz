@@ -1,5 +1,9 @@
 # Contributing
 
+<details><summary>Table of Contents</summary>
+<!-- toc -->
+</details>
+
 ## Dependencies
 
 Lists projects dependencies and the versions.
@@ -57,8 +61,17 @@ npx standard
 ```bash bash
 set -euo pipefail
 
-npm install rollup @rollup/plugin-node-resolve @rollup/plugin-babel @rollup/plugin-commonjs @rollup/plugin-terser --no-save
-npx rollup ./client.mjs -o client.min.js -f iife -n furver -p node-resolve -p babel -p commonjs # -p terser
+npm install rollup @rollup/plugin-babel @rollup/plugin-terser --no-save
+
+npx rollup \
+  ./client.mjs \
+  --name furver \
+  --file ./client.min.js \
+  --format iife \
+  -p babel \
+  -p terser
+
+# npx rollup ./client.mjs -o client.min.js -f iife -n furver -p node-resolve -p babel -p commonjs # -p terser
 
 git add ./client.min.js
 ```
@@ -88,6 +101,7 @@ done
 # Add a TOC
 chmod +w README.md
 npx markdown-toc -i README.md
+npx markdown-toc -i CONTRIBUTING.md
 chmod -w README.md
 
 # Stop the server

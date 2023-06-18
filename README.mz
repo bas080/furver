@@ -115,9 +115,9 @@ in a single request:
 
 ```javascript|javascript node
 (async function() {
-  const { default: FurverClient } = await import('./client.mjs')
+  const { default: client } = await import('./client.mjs')
 
-  const api = await FurverClient({endpoint: `http://localhost:${process.env.PORT}`})
+  const api = await client({endpoint: `http://localhost:${process.env.PORT}`})
 
   const { invoiceById, createInvoice } = api
 

@@ -5,6 +5,8 @@
 import { debounceWithIndex } from './debounce.mjs'
 import { FurverInvalidSchemaError } from './error.mjs'
 
+const schemaSymbol = Symbol('schema')
+
 // const debug = _debug.extend('client')
 // const debugError = debug.extend('error')
 // const debugFetch = debug.extend('fetch')
@@ -64,17 +66,15 @@ async function client ({
   schema = client.schema
 }) {
   const api = {}
+
   const assignMethods = (schema) => {
+    api[schemaSymbol] = schema
+
     if (!Array.isArray(schema)) {
       throw new FurverInvalidSchemaError('Not a valid schema')
     }
 
-    api.schema = () => schema
-
     return schema.reduce((api, [name]) => {
-      // Ignore the call name.
-      if (name === 'call') return api
-
       api[name] = (...args) => fetch(endpoint, {
         body: [name, ...args]
       })
@@ -85,21 +85,32 @@ async function client ({
     }, api)
   }
 
+  // debug('client initialized with endpoint', endpoint)
+
+  // You can also unset the default schema fetching if you wich not to have the
+  // API populated.
+  if (schema) {
+    assignMethods(await castFunction(schema)(endpoint === '/'
+      ? '/schema'
+      : `${endpoint}/schema`
+    ))
+  }
+
   api.call = body => fetch(endpoint, {
     body
   })
 
-  // debug('client initialized with endpoint', endpoint)
+  return api
+}
 
-  return assignMethods(await castFunction(schema)(endpoint === '/'
-    ? '/schema'
-    : `${endpoint}/schema`
-  ))
+function schema (api) {
+  return api[schemaSymbol]
 }
 
 export default client
 export {
   client,
+  schema,
   bulk,
   get,
   post

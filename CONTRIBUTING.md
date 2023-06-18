@@ -1,5 +1,21 @@
 # Contributing
 
+<details><summary>Table of Contents</summary>
+
+<!-- toc -->
+
+- [Dependencies](#dependencies)
+- [Development](#development)
+- [Tests](#tests)
+- [Audit](#audit)
+- [Formatting](#formatting)
+- [Client Bundle](#client-bundle)
+- [Documentation](#documentation)
+
+<!-- tocstop -->
+
+</details>
+
 ## Dependencies
 
 Lists projects dependencies and the versions.
@@ -49,15 +65,15 @@ npm t -- -R classic
 > tap -j 1 *.test.mjs --no-cov -R classic
 
 cli.test.mjs .......................................... 4/4 2s
-client.test.mjs ..................................... 15/15
+client.test.mjs ..................................... 16/16
 curry.test.mjs ........................................ 4/4
 debounce.test.mjs ..................................... 3/3
 http.test.mjs ....................................... 10/10
 lisp.test.mjs ....................................... 12/12
 promises.test.mjs ................................... 10/10
-total ............................................... 58/58
+total ............................................... 59/59
 
-  58 passing (5s)
+  59 passing (5s)
 
   ok
 ```
@@ -84,24 +100,17 @@ npx standard
 ```bash
 set -euo pipefail
 
-npm install rollup @rollup/plugin-node-resolve @rollup/plugin-babel @rollup/plugin-commonjs @rollup/plugin-terser --no-save
-npx rollup ./client.mjs -o client.min.js -f iife -n furver -p node-resolve -p babel -p commonjs # -p terser
+npm install rollup @rollup/plugin-babel @rollup/plugin-terser --no-save
 
-git add ./client.min.js
-```
-```
+npx rollup \
+  ./client.mjs \
+  --name furver \
+  --file ./client.min.js \
+  --format iife \
+  -p babel \
+  -p terser
 
-up to date, audited 403 packages in 9s
-
-38 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-```
-
-## Documentation
-
-```bash
+# npx rollup ./client.mjs -o client.min.js -f iife -n furver -p node-resolve -p ba```bash
 set -euo pipefail
 
 # Spawn a server to demonstrate examples.
@@ -124,6 +133,7 @@ done
 # Add a TOC
 chmod +w README.md
 npx markdown-toc -i README.md
+npx markdown-toc -i CONTRIBUTING.md
 chmod -w README.md
 
 # Stop the server
