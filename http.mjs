@@ -3,6 +3,7 @@ import http from 'node:http'
 import _debug from './debug.mjs'
 import schema from './schema.mjs'
 import fs from 'node:fs'
+import { URL } from 'node:url'
 
 const debug = _debug.extend('server')
 const mustDebug = debug.extend('start')
@@ -23,13 +24,15 @@ async function httpServer (api, port) {
 
     if (request.url === '/playground') {
       debug('Serving playground')
-      fs.createReadStream('./playground.html').pipe(response)
+      const fileUrl = new URL('playground.html', import.meta.url)
+      fs.createReadStream(fileUrl).pipe(response)
       return
     }
 
     if (request.url === '/client.min.js') {
       debug('Serving client')
-      fs.createReadStream('./client.min.js').pipe(response)
+      const fileUrl = new URL('client.min.js', import.meta.url)
+      fs.createReadStream(fileUrl).pipe(response)
       return
     }
 
