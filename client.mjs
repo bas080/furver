@@ -1,15 +1,10 @@
-// client.mjs
-
-// TBD: re-introduce debug once bundling is solved
-// import _debug from './debug.mjs'
+import _debug from './debug.mjs'
 import { debounceWithIndex } from './debounce.mjs'
 import { FurverInvalidSchemaError } from './error.mjs'
 
 const schemaSymbol = Symbol('schema')
 
-// const debug = _debug.extend('client')
-// const debugError = debug.extend('error')
-// const debugFetch = debug.extend('fetch')
+const debug = _debug.extend('client')
 
 const bulk = fetchFn => debounceWithIndex(calls => {
   const [[url, options]] = calls
@@ -52,7 +47,7 @@ const get = bulk(async (url, argOptions) => {
 })
 
 client.schema = async function furverClientSchema (url) {
-  // debug(`fetching schema from ${url}`)
+  debug(`fetching schema from ${url}`)
   const schemaRes = await fetch(url)
   return await schemaRes.json()
 }
@@ -85,7 +80,7 @@ async function client ({
     }, api)
   }
 
-  // debug('client initialized with endpoint', endpoint)
+  debug('client initialized with endpoint', endpoint)
 
   // You can also unset the default schema fetching if you wich not to have the
   // API populated.

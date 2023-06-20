@@ -1,5 +1,4 @@
 import * as ramda from 'ramda'
-import lips from '@jcubic/lips'
 import { readFileSync } from 'node:fs'
 import { withRequest } from '../server.mjs'
 import { promises } from '../promises.mjs'
@@ -96,10 +95,6 @@ const api = {
   },
   timestamp () {
     return Date.now()
-  },
-  async lips (string) {
-    const results = await lips.exec(string)
-    return results.valueOf()
   },
   createInvoice (data) {
     const id = 42

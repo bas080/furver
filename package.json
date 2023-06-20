@@ -15,7 +15,7 @@
     "start": "./cli.mjs",
     "dev": "npx nodemon ./cli.mjs",
     "test": "tap -j 1 *.test.mjs --no-cov",
-    "version": "markatzea CONTRIBUTING.mz > CONTRIBUTING.md && git add *.md",
+    "version": "npm run docs && git add *.md",
     "docs": "PORT=8999 markatzea CONTRIBUTING.mz | tee CONTRIBUTING.md"
   },
   "bin": {
@@ -32,8 +32,6 @@
   "author": "Bas Huis",
   "license": "MIT",
   "devDependencies": {
-    "@jcubic/lips": "^0.20.3",
-    "ramda": "^0.29.0",
     "tap": "^16.3.4"
   },
   "dependencies": {

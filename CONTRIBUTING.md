@@ -1,21 +1,5 @@
 # Contributing
 
-<details><summary>Table of Contents</summary>
-
-<!-- toc -->
-
-- [Dependencies](#dependencies)
-- [Development](#development)
-- [Tests](#tests)
-- [Audit](#audit)
-- [Formatting](#formatting)
-- [Client Bundle](#client-bundle)
-- [Documentation](#documentation)
-
-<!-- tocstop -->
-
-</details>
-
 ## Dependencies
 
 Lists projects dependencies and the versions.
@@ -100,18 +84,35 @@ npx standard
 ```bash
 set -euo pipefail
 
-npm install rollup @rollup/plugin-babel @rollup/plugin-terser --no-save
+# Install dependencies without storing them in the package.json
+npm install --no-save rollup \
+  @rollup/plugin-babel \
+  @rollup/plugin-commonjs \
+  @rollup/plugin-terser \
+  @rollup/plugin-node-resolve
 
-npx rollup \
-  ./client.mjs \
-  --name furver \
-  --file ./client.min.js \
-  --format iife \
-  -p babel \
-  -p terser
+# Uses the .babelrc and the rollup.config.mjs configs
+npx rollup -c
 
-# npx rollup ./client.mjs -o client.min.js -f iife -n furver -p node-resolve -p ba```bash
+git add ./client.min.js
+```
+```
+
+added 32 packages, removed 1 package, and audited 402 packages in 9s
+
+38 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+```
+
+## Documentation
+
+```bash
 set -euo pipefail
+
+# Install dependencies for the examples.
+npm install ramda --no-save > /dev/null
 
 # Spawn a server to demonstrate examples.
 export PORT=8999
@@ -133,7 +134,6 @@ done
 # Add a TOC
 chmod +w README.md
 npx markdown-toc -i README.md
-npx markdown-toc -i CONTRIBUTING.md
 chmod -w README.md
 
 # Stop the server
