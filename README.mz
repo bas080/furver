@@ -68,8 +68,8 @@ Here an working example of the JavaScript client.
   console.log(await api.call(['array', ['identity', 'hello world'], ['timestamp'], ['version']]))
 
   // Those are many quotes, we can reduce it by using the function reference.
-  const { identity, timestamp, version } = api
-  console.log(await api.call(['array', [identity, 'hello world'], [timestamp], [version]]))
+  const { identity, timestamp, version, array } = api
+  console.log(await api.call([array, [identity, 'hello world'], [timestamp], [version]]))
 })()
 ```
 
