@@ -74,7 +74,7 @@ async function client ({
         body: [name, ...args]
       })
 
-      api[name].toJSON = () => name
+      api[name].toJSON = () => ['ref', name]
 
       return api
     }, api)

@@ -77,3 +77,21 @@ test('should concatenate two arrays', async t => {
 
   t.same(result, [1, 2, 3, 4, 5, 6])
 })
+
+test('should fetch the reference to the item on the env', async t => {
+  const value = 'yey'
+
+  const env = {
+    thing: () => value
+  }
+
+  const expression = ['ref', 'thing']
+  const result = await exec(env, expression)
+
+  t.same(result(), value)
+
+  const result2 = await exec(env, ['thing'])
+  t.same(result2, value)
+
+  t.end()
+})

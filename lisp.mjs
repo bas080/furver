@@ -46,6 +46,11 @@ const exec = curry(async (env, expression) => {
     return exec(letEnv, letBody)
   }
 
+  if (operator === 'ref') {
+    const [name] = args
+    return env[name]
+  }
+
   if (Array.isArray(operator)) {
     return exec(env, [await exec(env, operator), ...args])
   }

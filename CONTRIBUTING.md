@@ -53,11 +53,11 @@ client.test.mjs ..................................... 16/16
 curry.test.mjs ........................................ 4/4
 debounce.test.mjs ..................................... 3/3
 http.test.mjs ....................................... 10/10
-lisp.test.mjs ....................................... 12/12
+lisp.test.mjs ....................................... 14/14
 promises.test.mjs ................................... 10/10
-total ............................................... 59/59
+total ............................................... 61/61
 
-  59 passing (5s)
+  61 passing (5s)
 
   ok
 ```
@@ -98,7 +98,7 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 402 packages in 9s
+added 32 packages, removed 1 package, and audited 402 packages in 5s
 
 38 packages are looking for funding
   run `npm fund` for details
