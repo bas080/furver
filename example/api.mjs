@@ -5,6 +5,8 @@ import { promises } from '../promises.mjs'
 
 const _package = JSON.parse(readFileSync('./package.json').toString())
 
+const items = []
+
 const invoices = {}
 
 // MAKE SURE IT'S BEEN IMPLEMENTED PROPERLY IN THE EXPORTED OBJECT.
@@ -103,6 +105,15 @@ const api = {
   },
   invoiceById (id) {
     return invoices[id]
+  },
+  push (x) {
+    return items.push(x)
+  },
+  items () {
+    return items
+  },
+  call () {
+    return 'Return value of the call method defined in the module.'
   },
   cannotMutate: 'initial value',
   mutate () {

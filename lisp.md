@@ -1,60 +1,84 @@
 # ./lisp.mjs
 
-The `lisp.mjs` module provides an implementation of a Lisp interpreter that can
-evaluate basic expressions, handle let and fn expressions, and throw an error
-for unknown expressions. The interpreter is asynchronous and returns a Promise
-that resolves to the result of the evaluation.
+<!-- toc -->
 
+- [Import](#import)
+- [Basic usage](#basic-usage)
+- [Async](#async)
+- [Let Expressions](#let-expressions)
+- [Fn Expressions](#fn-expressions)
+- [Ref Keyword](#ref-keyword)
 
-> The Lisp was added because I, Bas Huis, wanted support for bulk requests.
-> I needed a way to represent that in JSON. JSON, because it is simple to
-> serialize and parse. I had a a JSON Lisp laying around and it seems to me
-> like a good match for this purposes since it manages async and doing things
-> in parallel. I added the `fn` and `let` to make it a bit fancier but really
-> it's not necessary.
+<!-- tocstop -->
 
-Usage
------
+The furver lisp is an essential part of the furver experience. Firstly it
+enables the bulk and parallel handling of requests when using the user friendly
+client. Secondly it allows for more advanced usage by using the furver lisp
+directly.
+
+This docs shows what the lisp features are. It also shows that you can use the
+lisp module directly by importing it.
+
+## Import
 
 To use the Lisp interpreter, you first need to import the `exec` function from
 the module:
 
 ```javascript
-import { exec } from 'furver/lisp.mjs'
+import exec from './lisp.mjs'
 ```
 
 Once you have imported the `exec` function, you can call it with an environment
 object and an expression to evaluate:
 
-```javascript
-const env = { '+': (a, b) => a + b }
-const expression = ['+', 1, 2]
+## Basic usage
 
-exec(env, expression)
-  .then(result => console.log(result)) // 3
-  .catch(error => console.error(error))
+```javascript
+const env = { 'add': (a, b) => a + b }
+const expression = ['add', 1, 2]
+
+exec(env, expression).then(console.log)
+```
+```
+3
 ```
 
 The `exec` function takes two arguments:
 
 1. The environment object in which the expression is evaluated. This is an
    object that maps operator names to functions that implement those operators.
-   In the example above, the environment object contains a `+` operator that
+   In the example above, the environment object contains a `add` operator that
    adds two numbers.
 
 2. The expression to evaluate. This is an array that represents the expression
    in the Lisp syntax. The first element of the array is the operator name, and
    the rest of the elements are the arguments to the operator. In the example
-   above, the expression is `['+', 1, 2]`, which means "add 1 and 2".
+   above, the expression is `['add', 1, 2]`, which means "add 1 and 2".
 
-Let Expressions
----------------
+## Async
+
+The lisp is will wait for a promise returned by a call before calling the next
+function.
+
+```javascript
+const env = { 'add': (a, b) => a + b, pIdentity: (x) => Promise.resolve(x) }
+
+exec(env, ['add', ['pIdentity', 1], 2]).then(console.log)
+```
+```
+3
+```
+
+> Define a `promiseAll` helper on the env if you are working with arrays of
+> promises.
+
+## Let Expressions
 
 The Lisp interpreter supports let expressions, which allow you to define local
 variables in an expression. A let expression has the form:
 
-```lisp
-(let ((name1 value1) (name2 value2) ...) body)
+```javascript
+[let [[name1 value1] [name2 value2] ...] body]
 ```
 
 The `let` operator takes two arguments:
@@ -68,25 +92,30 @@ The `let` operator takes two arguments:
 Here's an example of using a let expression:
 
 ```javascript
-const env = { '+': (a, b) => a + b }
-const expression = ['let', [['x', 2], ['y', 3]], ['+', ['x'], ['y']]]
+const env = { 'add': (a, b) => a + b, always: (x) => () => x }
+const expression = ['let',
+  [
+    ['x', ['always', 2]],
+    ['y', ['always', 3]],
+  ],
+  ['add', ['x'], ['y']]]
 
-exec(env, expression)
-  .then(result => console.log(result)) // 5
-  .catch(error => console.error(error))
+exec(env, expression).then(console.log)
+```
+```
+5
 ```
 
 This expression defines two lexically scoped variables `x` and `y` with values
 2 and 3, respectively, and then adds them together.
 
-Fn Expressions
---------------
+## Fn Expressions
 
 The Lisp interpreter also supports fn expressions, which allow you to define
 anonymous functions. An fn expression has the form:
 
-```lisp
-(fn body)
+```javascript
+[fn body]
 ```
 
 The `fn` operator takes only the body argument. It does not support arguments
@@ -96,31 +125,51 @@ wish to define your own values you should use the let statement.
 Here's an example of using an fn expression:
 
 ```javascript
-const env = { '+': (a, b) => a + b }
+const env = { '+': (a, b) => a + b, x: () => 2}
 const expression = ['fn', ['+', 1, ['x']]]
 
 exec(env, expression)
-  .then(result => console.log(typeof result)) // function
-  .catch(error => console.error(error))
+  .then(async fn => console.log(await fn(), fn))
+```
+```
+3 [Function (anonymous)]
 ```
 
 This expression defines an anonymous function that adds 1 to a single argument
 `x`.
 
-To invoke the function, you pass it an environment object that contains the
-argument values:
+You can also overwrite the env value for `x` by passing an object to the
+function object.
 
 ```javascript
 const env = { '+': (a, b) => a + b }
-const expression = ['fn', ['+', 1, ['x']]]
+const expression = ['fn', ['+', 1, ['ref', 'x']]]
 
 exec(env, expression)
   .then(fn => fn({ x: 2 }))
-  .then(result => console.log(result)) // 3
-  .catch
+  .then(console.log)
+```
+```
+3
 ```
 
+## Ref Keyword
+
+You might see a `ref` in the previous example. The ref allows you to get the
+reference/value of a specific alias on the environment. This removes the need
+for wrapping a value in a function that returns itself.
+
+```javascript
+[ref, name]
+```
+
+```javascript
+exec({ 'hello': 'world' }, ['ref', 'hello']).then(console.log)
+```
+```
+world
+```
 
 In conclusion, the lisp.mjs module provides an asynchronous implementation of
-a Lisp interpreter that supports basic expressions, let expressions, and fn
+a Lisp interpreter that supports basic expressions, let expressions, ref keyword and fn
 expressions.

@@ -90,15 +90,18 @@ for mz in *.mz ;do
   name="${mz%.*}"
   md="${name}.md"
   echo "Generating docs for: $mz > $md"
-  rm -f "$md"
+  rm "$md"
   markatzea "$mz" | tee "$md" 1>&2
-  chmod -w "$md"
+  chmod -x "$md"
 done
 
 # Add a TOC
-chmod +w README.md
 npx markdown-toc -i README.md
-chmod -w README.md
+npx markdown-toc -i client.md
+npx markdown-toc -i lisp.md
+
+# Remove tmp files created in the mz files.
+rm -v .tmp.*
 
 # Stop the server
 pkill furver

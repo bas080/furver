@@ -8,12 +8,16 @@ const debug = _debug.extend('client')
 
 const bulk = fetchFn => debounceWithIndex(calls => {
   const [[url, options]] = calls
-  const body = JSON.stringify(['array', ...calls.map(([, { body }]) => body)])
-
-  return fetchFn(url, {
+  const payload = ['array', ...calls.map(([, { body }]) => body)]
+  const body = JSON.stringify(payload)
+  const config = {
     ...options,
     body
-  })
+  }
+
+  debug(url, config)
+
+  return fetchFn(url, config)
 })
 
 const post = bulk(async (url, options) => {
@@ -33,9 +37,12 @@ const post = bulk(async (url, options) => {
 
 const get = bulk(async (url, argOptions) => {
   const { body, ...options } = argOptions || {}
-  const queryString = new URLSearchParams({ body }).toString()
-  const fullUrl = `${url}?${queryString}`
-  const res = await fetch(fullUrl, options)
+  const search = new URLSearchParams({ body })
+  const fullUrl = new URL(url)
+
+  fullUrl.search = search
+
+  const res = await fetch(fullUrl.toString(), options)
 
   if (!res.ok) {
     throw res
@@ -94,6 +101,8 @@ async function client ({
   api.call = body => fetch(endpoint, {
     body
   })
+
+  api.call.toJSON = () => ['ref', 'call']
 
   return api
 }

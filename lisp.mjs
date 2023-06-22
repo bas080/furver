@@ -66,3 +66,4 @@ const exec = curry(async (env, expression) => {
 })
 
 export { exec }
+export default exec

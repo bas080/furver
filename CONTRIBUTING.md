@@ -14,7 +14,7 @@ curl --version | head -n 1 | cut -f -2 -d ' '
 ```
 ```
 9.6.7
-v20.3.0
+v20.3.1
 GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)
 curl 7.68.0
 ```
@@ -98,7 +98,7 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 402 packages in 5s
+added 32 packages, removed 1 package, and audited 402 packages in 1s
 
 38 packages are looking for funding
   run `npm fund` for details
@@ -126,15 +126,16 @@ for mz in *.mz ;do
   name="${mz%.*}"
   md="${name}.md"
   echo "Generating docs for: $mz > $md"
-  rm -f "$md"
+  rm "$md"
   markatzea "$mz" | tee "$md" 1>&2
-  chmod -w "$md"
+  chmod -x "$md"
 done
 
 # Add a TOC
-chmod +w README.md
 npx markdown-toc -i README.md
-chmod -w README.md
+npx markdown-toc -i client.md
+npx markdown-toc -i lisp.md
+
 
 # Stop the server
 pkill furver

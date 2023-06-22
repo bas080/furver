@@ -1,7 +1,7 @@
 # Furver
 
 Furver is a minimal RPC solution that uses JSON and Node.js. Turn any
-JavaScript module into into a simple to use client API that is easy to learn
+JavaScript module into a simple to use client API that is easy to learn
 while also expressive enough for advanced use-cases.
 
 [![NPM](https://img.shields.io/npm/v/furver?color=blue&style=flat-square)](https://www.npmjs.com/package/furver)
@@ -84,14 +84,14 @@ Here an working example of the JavaScript client.
   console.log(await api.call(['array', ['identity', 'hello world'], ['timestamp'], ['version']]))
 
   // Those are many quotes, we can reduce it by using the function reference.
-  const { identity, timestamp, version } = api
-  console.log(await api.call(['array', [identity, 'hello world'], [timestamp], [version]]))
+  const { identity, timestamp, version, array } = api
+  console.log(await api.call([array, [identity, 'hello world'], [timestamp], [version]]))
 })()
 ```
 ```javascript
-[ 'hello world', 1687344396388, '1.0.0' ]
-[ 'hello world', 1687344396393, '1.0.0' ]
-[ 'hello world', 1687344396395, '1.0.0' ]
+[ 'hello world', 1687441644945, '1.0.0' ]
+[ 'hello world', 1687441644950, '1.0.0' ]
+[ 'hello world', 1687441644953, '1.0.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
