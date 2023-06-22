@@ -32,11 +32,13 @@ while also expressive enough for advanced use-cases.
 
 ## Features
 
-- No boilerplate.
+- Low code.
 - Makes it easy to quickly iterate.
 - Supports bulk requests with an intuitive client js API.
 - Parallel operations out of the box.
 - Covers both simple and complicated use-cases.
+
+[Get Started.](./getting-started.md)
 
 ## Server
 
@@ -89,9 +91,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1687441644945, '1.0.0' ]
-[ 'hello world', 1687441644950, '1.0.0' ]
-[ 'hello world', 1687441644953, '1.0.0' ]
+[ 'hello world', 1687472621012, '1.0.0' ]
+[ 'hello world', 1687472621017, '1.0.0' ]
+[ 'hello world', 1687472621020, '1.0.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program

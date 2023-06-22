@@ -16,11 +16,13 @@ while also expressive enough for advanced use-cases.
 
 ## Features
 
-- No boilerplate.
+- Low code.
 - Makes it easy to quickly iterate.
 - Supports bulk requests with an intuitive client js API.
 - Parallel operations out of the box.
 - Covers both simple and complicated use-cases.
+
+[Get Started.](./getting-started.md)
 
 ## Server
 

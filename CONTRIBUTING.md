@@ -62,17 +62,6 @@ total ............................................... 61/61
   ok
 ```
 
-## Audit
-
-Check if package is free of vulnerabilities.
-
-```bash
-npm audit
-```
-```
-found 0 vulnerabilities
-```
-
 ## Formatting
 
 ```bash
@@ -98,12 +87,23 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 402 packages in 1s
+added 32 packages, removed 1 package, and audited 402 packages in 2s
 
 38 packages are looking for funding
   run `npm fund` for details
 
-found 0 vulnerabilities
+16 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
 ```
 
 ## Documentation
@@ -118,6 +118,9 @@ npm install ramda --no-save > /dev/null
 export PORT=8999
 npx furver server ./example/api.mjs&
 
+# And spawn one for the getting-started examples
+npx furver server ./example/getting-started.mjs --port 5000&
+
 # Could use pinging instead to wait for the server to start.
 sleep 4
 
@@ -126,7 +129,7 @@ for mz in *.mz ;do
   name="${mz%.*}"
   md="${name}.md"
   echo "Generating docs for: $mz > $md"
-  rm "$md"
+  rm "$md" || true
   markatzea "$mz" | tee "$md" 1>&2
   chmod -x "$md"
 done
@@ -136,15 +139,26 @@ npx markdown-toc -i README.md
 npx markdown-toc -i client.md
 npx markdown-toc -i lisp.md
 
+# Remove tmp files created in the mz files.
+rm -v .tmp.*
 
 # Stop the server
 pkill furver
 ```
 ```
 Generating docs for: client.mz > client.md
+Generating docs for: getting-started.mz > getting-started.md
 Generating docs for: lisp.mz > lisp.md
 Generating docs for: README.mz > README.md
 Generating docs for: server.mz > server.md
+removed '.tmp.client.example.mjs'
+removed '.tmp.client.mjs'
+removed '.tmp.getting.mjs'
+removed '.tmp.lisp_exec.mjs'
+removed '.tmp.lisp_fn.mjs'
+removed '.tmp.lisp_import.mjs'
+removed '.tmp.lisp_let.mjs'
+removed '.tmp.lisp_ref.mjs'
 ```
 
 ## Changelog

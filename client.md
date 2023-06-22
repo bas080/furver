@@ -1,5 +1,14 @@
 # ./client.mjs
 
+<!-- toc -->
+
+- [Import client](#import-client)
+- [Initialize client](#initialize-client)
+- [Client initialization config](#client-initialization-config)
+- [Calling server functions](#calling-server-functions)
+
+<!-- tocstop -->
+
 The furver client is a powerful addition to the furver server. It makes it
 easy to use the server and bundles requests into a single request when
 possible.
@@ -67,8 +76,7 @@ Note that the `fetch`, `schema`, and `method` options can be customized by
 passing your own functions or values to the client constructor.
 
 Once you have an instance of the client, you can call methods on it as defined
-by the Furver API schema. For example, if the schema has a method called
-`getUsers`, you can call it like this:
+by the Furver API schema.
 
 ## Calling server functions
 
@@ -86,6 +94,7 @@ console.log(await furverGet.items())
 You can also perform multiple calls that are bundled into a single request. We
 can prove this by enabling the logger and performing multiple function calls.
 
+
 ```javascript
 await Promise.all([
     furverGet.push('hello'),
@@ -96,12 +105,12 @@ await Promise.all([
 console.log(await furverGet.items())
 ```
 ```javascript
-2023-06-22T13:47:22.733Z furver:client client initialized with endpoint http://localhost:8999
-2023-06-22T13:47:22.734Z furver:client fetching schema from http://localhost:8999/schema
-2023-06-22T13:47:22.773Z furver:client http://localhost:8999 {
+furver:client client initialized with endpoint http://localhost:8999
+furver:client fetching schema from http://localhost:8999/schema
+furver:client http://localhost:8999 {
   body: '["array",["push","hello"],["push","silly"],["push","world"]]'
 }
-2023-06-22T13:47:22.778Z furver:client http://localhost:8999 { body: '["array",["items"]]' }
+furver:client http://localhost:8999 { body: '["array",["items"]]' }
 [ 1, 2, 3, 'hello', 'silly', 'world' ]
 ```
 
