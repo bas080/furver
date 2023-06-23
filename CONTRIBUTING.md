@@ -87,7 +87,7 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 402 packages in 2s
+added 32 packages, removed 1 package, and audited 402 packages in 6s
 
 38 packages are looking for funding
   run `npm fund` for details

@@ -23,8 +23,8 @@ while also expressive enough for advanced use-cases.
   * [Request using the furver client](#request-using-the-furver-client)
 - [Server](#server)
 - [Client](#client)
-  * [JavaScript](#javascript)
-  * [REPL](#repl)
+  * [Use in your code](#use-in-your-code)
+  * [Client REPL](#client-repl)
   * [Browser](#browser)
 - [Lisp](#lisp)
 - [CLI](#cli)
@@ -164,7 +164,7 @@ using either the client functions or a simple JSON Lisp.
 
 Here an working example of the JavaScript client.
 
-### JavaScript
+### Use in your code
 
 ```javascript
 (async function() {
@@ -190,9 +190,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1687509704213, '1.0.0' ]
-[ 'hello world', 1687509704218, '1.0.0' ]
-[ 'hello world', 1687509704221, '1.0.0' ]
+[ 'hello world', 1687511012880, '1.0.0' ]
+[ 'hello world', 1687511012886, '1.0.0' ]
+[ 'hello world', 1687511012890, '1.0.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
@@ -200,7 +200,7 @@ that is run server-side.
 
 This client is compatible with the browser and Node.js.
 
-### REPL
+### Client REPL
 
 You can also start talking with a Furver server using the cli.
 
@@ -222,7 +222,7 @@ This will start a prompt that takes valid JavaScript or a Lisp expression.
 ### Browser
 
 By default the server hosts a browser friendly bundled version of the client at
-`/client.min.js`.
+`/client.min.js`. This script registers the `furver` global variable.
 
 You can try this client in the playground by starting a furver server and
 opening `http://localhost:3000/playground` in your browser.
@@ -232,44 +232,10 @@ opening `http://localhost:3000/playground` in your browser.
 ## Lisp
 
 Furver's Lisp-like language allows developers to perform complex aggregations
-and operations in a single request. For example, to create and get an invoice
-in a single request:
+and operations in a single request. It builds ontop of JSON by using arrays for
+its s-expressions.
 
-```javascript
-(async function() {
-  const { default: client } = await import('./client.mjs')
-
-  const api = await client({endpoint: `http://localhost:${process.env.PORT}`})
-
-  const { invoiceById, createInvoice } = api
-
-  // You could do this which results in two http requests:
-
-  console.log(await invoiceById(await createInvoice({
-    amount: 42, customerId: 1
-  })))
-
-  // or you can perform the same action within a single request:
-
-  const createAndGetInvoice = [invoiceById, [createInvoice, {
-    amount: 42, customerId: 1
-  }]]
-
-  console.log(await api.call(createAndGetInvoice))
-})()
-```
-```javascript
-{ amount: 42, customerId: 1 }
-{ amount: 42, customerId: 1 }
-```
-
-The client waits a very short while and checks if multiple api methods have
-been called. When that is the case it will combine those calls into a single
-http request. That is not the case when using `await` before calling the next
-function that depends on the return value of the previous function.
-
-[Read more about the bare bones Furver lisp.](./lisp.md)
-
+[Read more about the furver lisp.](./lisp.md)
 
 ## CLI
 
