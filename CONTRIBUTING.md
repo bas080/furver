@@ -147,7 +147,6 @@ pkill furver
 ```
 ```
 Generating docs for: client.mz > client.md
-Generating docs for: getting-started.mz > getting-started.md
 Generating docs for: lisp.mz > lisp.md
 Generating docs for: README.mz > README.md
 Generating docs for: server.mz > server.md

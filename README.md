@@ -15,6 +15,12 @@ while also expressive enough for advanced use-cases.
 <!-- toc -->
 
 - [Features](#features)
+- [Getting Started](#getting-started)
+  * [Installation](#installation)
+  * [Define a module](#define-a-module)
+  * [Start the server](#start-the-server)
+  * [Request using curl](#request-using-curl)
+  * [Request using the furver client](#request-using-the-furver-client)
 - [Server](#server)
 - [Client](#client)
   * [JavaScript](#javascript)
@@ -38,7 +44,100 @@ while also expressive enough for advanced use-cases.
 - Parallel operations out of the box.
 - Covers both simple and complicated use-cases.
 
-[Get Started.](./getting-started.md)
+## Getting Started
+
+Covers the basic use case of defining a module, starting a server and
+performing requests with and without the client.
+
+### Installation
+
+```bash
+npm install furver -g
+```
+
+### Define a module
+
+```javascript
+// ./example/getting-started.mjs
+
+const items = []
+
+export default {
+  push (x) {
+    return items.push(x)
+  },
+  items () {
+    return items
+  },
+  ping () {
+    return 'pong'
+  }
+}
+```
+
+### Start the server
+
+Port 5000 for the following examples.
+
+```bash
+furver server ./example/getting-started.mjs --port 5000
+```
+
+We'll use the curl and ping function to check if the server is working.
+
+```bash
+sleep 4
+curl http://localhost:5000 -d '["ping"]'
+```
+```
+"pong"
+```
+
+Now for the http clients.
+
+### Request using curl
+
+
+```bash
+curl http://localhost:5000 -d '["array", ["push", 1], ["push", 2], ["push", 3], ["items"]]'
+```
+```
+[1,2,3,[1,2,3]]
+```
+
+### Request using the furver client
+
+Now let's use the furver client module and `api.push` some letters.
+
+```javascript
+import client from './client.mjs'
+
+const api = await client({
+  endpoint: 'http://localhost:5000'
+})
+
+console.log(await Promise.all([
+
+  api.push('a'),
+  api.call(['push', 'b']),
+  api.call([['ref', 'push'], 'c']),
+  api.call([api.push, 'd'])
+
+]))
+
+console.log(await api.items())
+```
+```
+[ 4, 5, 6, 7 ]
+[
+  1,   2,   3,   'a',
+  'b', 'c', 'd'
+]
+```
+
+These are all equivalent ways of calling the push function in the server
+module. Read more about the [client](./client.md) and [lisp](./lisp.md) if you
+want to learn more.
 
 ## Server
 
@@ -91,9 +190,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1687472621012, '1.0.0' ]
-[ 'hello world', 1687472621017, '1.0.0' ]
-[ 'hello world', 1687472621020, '1.0.0' ]
+[ 'hello world', 1687509704213, '1.0.0' ]
+[ 'hello world', 1687509704218, '1.0.0' ]
+[ 'hello world', 1687509704221, '1.0.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
