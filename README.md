@@ -82,9 +82,6 @@ Port 5000 for the following examples.
 ```bash
 furver server ./example/getting-started.mjs --port 5000
 ```
-```
-furver server ./example/getting-started.mjs --port 5000
-```
 
 Now for the http clients.
 
@@ -191,9 +188,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1687511587927, '1.0.0' ]
-[ 'hello world', 1687511587933, '1.0.0' ]
-[ 'hello world', 1687511587936, '1.0.0' ]
+[ 'hello world', 1687511887855, '1.0.0' ]
+[ 'hello world', 1687511887860, '1.0.0' ]
+[ 'hello world', 1687511887863, '1.0.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program

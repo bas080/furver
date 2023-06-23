@@ -57,7 +57,7 @@ export default {
 
 Port 5000 for the following examples.
 
-```bash cat -; sleep 4
+```bash
 furver server ./example/getting-started.mjs --port 5000
 ```
 
