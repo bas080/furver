@@ -16,7 +16,13 @@ async function createApi (modules) {
     if (filePath.startsWith('.')) { filePath = path.join(process.cwd(), filePath) }
 
     const mod = await import(filePath)
+
     const exported = mod.default || mod
+
+    // Assign the default to module name if not already taken
+    if (mod.default && !exported[filePath]) {
+      exported[filePath] = mod.default
+    }
 
     return { ...merged, ...exported }
   }, {})
