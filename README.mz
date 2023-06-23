@@ -57,21 +57,19 @@ export default {
 
 Port 5000 for the following examples.
 
-```bash
+```bash cat -; sleep 4
 furver server ./example/getting-started.mjs --port 5000
-```
-
-We'll use the curl and ping function to check if the server is working.
-
-```bash bash
-sleep 4
-curl http://localhost:5000 -d '["ping"]'
 ```
 
 Now for the http clients.
 
 ### Request using curl
 
+```bash bash
+curl http://localhost:5000 -d '["ping"]'
+```
+
+Let's add some numbers to our `items` array.
 
 ```bash bash
 curl http://localhost:5000 -d '["array", ["push", 1], ["push", 2], ["push", 3], ["items"]]'

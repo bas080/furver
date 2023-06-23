@@ -82,21 +82,22 @@ Port 5000 for the following examples.
 ```bash
 furver server ./example/getting-started.mjs --port 5000
 ```
-
-We'll use the curl and ping function to check if the server is working.
-
-```bash
-sleep 4
-curl http://localhost:5000 -d '["ping"]'
 ```
-```
-"pong"
+furver server ./example/getting-started.mjs --port 5000
 ```
 
 Now for the http clients.
 
 ### Request using curl
 
+```bash
+curl http://localhost:5000 -d '["ping"]'
+```
+```
+"pong"
+```
+
+Let's add some numbers to our `items` array.
 
 ```bash
 curl http://localhost:5000 -d '["array", ["push", 1], ["push", 2], ["push", 3], ["items"]]'
@@ -190,9 +191,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1687511012880, '1.0.0' ]
-[ 'hello world', 1687511012886, '1.0.0' ]
-[ 'hello world', 1687511012890, '1.0.0' ]
+[ 'hello world', 1687511587927, '1.0.0' ]
+[ 'hello world', 1687511587933, '1.0.0' ]
+[ 'hello world', 1687511587936, '1.0.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
