@@ -45,8 +45,8 @@ process.title = name
 // Debug.enable('*:start,*:error')
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: $0 [command] [options..]')
   .scriptName(name)
+  .demandCommand(1, 'You must specify a command')
   .env(name.toUpperCase())
   .command('server <modules..>', 'start server', noop, async ({ modules, port }) => {
     serve(modules, port)
