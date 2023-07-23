@@ -1,112 +1,48 @@
 # ./server.mjs
 
-The furver server module has the following features:
+<!-- toc -->
 
-- A `FurverServer` function which starts a http server with furver lisp support
-  - Knows how to parse a furver request and execute the Furver lisp.
-  - Supports both get with query params and post/put/patch requests with
-    a body.
-- A helper (`withRequest`) for defining api methods that have access to the
-  request object.
-- A helper (`withConfig`) that allows to configure onRequest, onError and
-  onResponse lifecycle methods.
+- [Import](#import)
+- [Reference](#reference)
+  * [`server(object)(request, response, lispProgram)`](#serverobjectrequest-response-lispprogram)
+  * [`withConfig](#withconfig)
+    + [option.onResponse](#optiononresponse)
+    + [option.onRequest](#optiononrequest)
+    + [option.onError](#optiononerror)
+  * [withRequest](#withrequest)
+  * [withResponse](#withresponse)
 
-## Request examples
+<!-- tocstop -->
 
-For these examples we assume a server is running with the `ramda` utility
-library selected as a module.
+The server module makes it easier to integrate furver server behaviour in
+framework implementations or in your own code.
 
-Let's look at a simple curl example. We'll use the `inc` function to
-confirm that the lisp is evaluated.
+> This module does not start an HTTP server. The `./http.mjs` module is responsible for
+> that and it uses the server module.
 
-```bash
-curl -X POST "http://localhost:$PORT" \
-  -d '["inc", 41]'
-```
-```
-42
-```
+## Import
 
-> PUT, PATCH and DELETE are also valid methods. Furver server only cares about
-> the existance of the body or the `body` query param.
+```javascript
+import {
 
-And now for a get request example.
+  // A function that makes it easier to implement furver in your node server.
+  server,
 
-```bash
-curl -G "http://localhost:$PORT" --data-urlencode body='["inc", 42]'
-```
-```
-43
+  // Helpers to extend module behaviours.
+  withRequest,
+  withConfig
+
+} from './server.mjs'
 ```
 
-> We use the `-G` and `--data-urlencode` to perform a GET request with properly
-> encoded JSON in the body query param.
+## Reference
 
-We also have some cases where the server returns a non 2xx response.
+### `server(object)(request, response, lispProgram)`
 
-Invalid JSON responds with a 400 (Bad Request) status:
+A function that takes an object which could be the module export or any object.
+It then returns a function which is called on request.
 
-```bash
-curl "http://localhost:$PORT" -d '[operatorDoesNotExist]'
-```
-```
-Status: 400
-```
-
-When the function does not exist:
-
-```bash
-curl "http://localhost:$PORT" -d '["methodDoesNotExist"]'
-```
-```
-Status: 404
-```
-
-An error or promise rejection occurs in one or more functions will responds
-with a 500.
-
-```bash
-curl -v "http://localhost:$PORT" -d '["alwaysThrows"]'
-```
-```
-Status: 500
-```
-
-This demonstrates that the server has a very clear purpose, it is to receive
-a request, parse the furver lisp program and evaluate that program before
-sending it back to the http client.
-
-## FurverServer
-
-
-```node
-const port = Number(process.env.PORT) + 1;
-
-async function main() {
-  const { default: FurverServer } = await import('./http.mjs')
-
-  const server = await FurverServer({
-    hello: () => 'world'
-  }, port)
-
-  const res = await fetch(`http://localhost:${port}`, {
-    method: 'POST',
-    body: JSON.stringify(["hello"])
-  })
-
-  console.log(await res.json())
-
-  process.exit()
-}
-main()
-```
-```
-world
-```
-
-## withConfig
-
-`import { withConfig } from 'furver/server.mjs'`
+### `withConfig
 
 The `withConfig` function is completely optional and used to define behavior
 that is performed on every request, response or error. Simply wrap the exported
@@ -130,7 +66,7 @@ export default withConfig(option, api)
 
 > All methods are `await`ed which allows for async behavior.
 
-### option.onResponse
+#### option.onResponse
 
 When defined, this method will override the response behavior and instead use
 the behavior defined in this method.
@@ -145,25 +81,22 @@ onResponse: (req, res, result) => {
 }
 ```
 
-### option.onRequest
+#### option.onRequest
 
 Does not override any functionality and is simply called. You could set values
 on the request object which are later used in other functions.
 
-### option.onError
+#### option.onError
 
 When defined, it overides the error response. It behaves similarly to `option.onResponse`.
 
 
-## withRequest
+### withRequest
 
-`import { withRequest } from 'furver/server.mjs'`
-
-The `withRequest` function is used in conjunction with the `FurverServer`
-function to create API endpoints that can access the current HTTP request
-object. To create an API endpoint that can access the request object, simply
-define a method that takes the request object as its first argument and use
-`withRequest` to wrap it.
+The `withRequest` function is used to create API endpoints that can access the
+current HTTP request object. To create an API endpoint that can access the
+request object, simply define a method that takes the request object as its
+first argument and use `withRequest` to wrap it.
 
 For example, the following code creates an API endpoint that can access the
 request object:
@@ -185,8 +118,6 @@ const api = {
   method,
   // other endpoints...
 };
-
-const server = await FurverServer(api);
 ```
 
 The example server has a function for getting the request method.
@@ -198,4 +129,15 @@ curl -X PATCH "http://localhost:$PORT" -d '["method"]'
 "PATCH"
 ```
 
-Having access to a request allows for request specific features like sessions.
+Having access to a request object allows for request specific features like
+sessions.
+
+
+### withResponse
+
+If you wish to get access to the response object you can use the `withResponse`
+helper in a similar manner as the `withRequest` helper.
+
+> Yes, the withResponse documentation should be improved.
+
+

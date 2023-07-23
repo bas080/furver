@@ -103,6 +103,18 @@ curl http://localhost:5000 -d '["array", ["push", 1], ["push", 2], ["push", 3], 
 [1,2,3,[1,2,3]]
 ```
 
+Also support requests with `GET` method:
+
+```bash
+curl -G "http://localhost:$PORT" --data-urlencode body='["inc", 42]'
+```
+```
+43
+```
+
+> We use the `-G` and `--data-urlencode` to perform a GET request with properly
+> encoded JSON in the body query param.
+
 ### Request using the furver client
 
 Now let's use the furver client module and `api.push` some letters.
@@ -188,9 +200,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1687512872227, '1.1.0' ]
-[ 'hello world', 1687512872232, '1.1.0' ]
-[ 'hello world', 1687512872236, '1.1.0' ]
+[ 'hello world', 1690147889418, '1.1.0' ]
+[ 'hello world', 1690147889426, '1.1.0' ]
+[ 'hello world', 1690147889430, '1.1.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
@@ -244,7 +256,7 @@ debug Furver servers.
 furver --help
 ```
 ```
-Usage: furver [command] [options..]
+furver <command>
 
 Commands:
   furver server <modules..>                 start server

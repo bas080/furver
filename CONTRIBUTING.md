@@ -13,8 +13,8 @@ bash --version | head -n 1 # For usage examples
 curl --version | head -n 1 | cut -f -2 -d ' '
 ```
 ```
-9.6.7
-v20.3.1
+9.7.2
+v20.4.0
 GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)
 curl 7.68.0
 ```
@@ -87,21 +87,15 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 402 packages in 2s
+added 32 packages, removed 1 package, and audited 402 packages in 7s
 
 38 packages are looking for funding
   run `npm fund` for details
 
-16 moderate severity vulnerabilities
+1 moderate severity vulnerability
 
-To address issues that do not require attention, run:
+To address all issues, run:
   npm audit fix
-
-To address all issues possible (including breaking changes), run:
-  npm audit fix --force
-
-Some issues need review, and may require choosing
-a different dependency.
 
 Run `npm audit` for details.
 ```
@@ -138,6 +132,7 @@ done
 npx markdown-toc -i README.md
 npx markdown-toc -i client.md
 npx markdown-toc -i lisp.md
+npx markdown-toc -i server.md
 
 # Remove tmp files created in the mz files.
 rm -v .tmp.*
@@ -147,6 +142,7 @@ pkill furver
 ```
 ```
 Generating docs for: client.mz > client.md
+Generating docs for: http.mz > http.md
 Generating docs for: lisp.mz > lisp.md
 Generating docs for: README.mz > README.md
 Generating docs for: server.mz > server.md
