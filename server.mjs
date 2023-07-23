@@ -9,12 +9,20 @@ const debugError = debug.extend('error')
 const furverSymbol = Symbol('server')
 
 const withRequest = method => function (...args) {
-  const request = this[furverSymbol]
+  const request = this[furverSymbol].request
 
   return method.call(this, request, ...args)
 }
 
+const withResponse = method => function (...args) {
+  const response = this[furverSymbol].response
+
+  return method.call(this, response, ...args)
+}
+
 const withConfig = curry((config, api) => {
+  debug('Configured with', config)
+
   api[furverSymbol] = config
 
   return api
@@ -33,12 +41,13 @@ function server (api) {
     onError
   } = api[furverSymbol] || {}
 
-  const frozenDeep = deepFreeze(api)
+  deepFreeze(api)
 
   debug('API', api)
 
   return async function onFurverRequest (request, response, program) {
     if (isNotNil(onRequest)) {
+      request.body = program
       await onRequest(request, response)
     }
 
@@ -46,9 +55,9 @@ function server (api) {
       debug('Evaluate', program)
 
       // Create a copy of env to reduce the chance of mutations.
-      const requestEnv = { ...frozenDeep }
+      const requestEnv = { ...api }
 
-      requestEnv[furverSymbol] = request
+      requestEnv[furverSymbol] = { request, response }
 
       const result = await exec(requestEnv, program)
 
@@ -103,4 +112,4 @@ function isPrimitive (value) {
 }
 
 export default server
-export { server, withRequest, withConfig }
+export { server, withRequest, withResponse, withConfig }

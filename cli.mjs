@@ -24,7 +24,7 @@ async function createApi (modules) {
       exported[filePath] = mod.default
     }
 
-    return { ...merged, ...exported }
+    return Object.assign(Object.create(merged), exported)
   }, {})
 
   return api

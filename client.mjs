@@ -22,6 +22,7 @@ const bulk = fetchFn => debounceWithIndex(calls => {
 
 const post = bulk(async (url, options) => {
   const res = await fetch(url, {
+    credentials: 'include',
     ...options,
     method: 'post'
   })
@@ -42,7 +43,10 @@ const get = bulk(async (url, argOptions) => {
 
   fullUrl.search = search
 
-  const res = await fetch(fullUrl.toString(), options)
+  const res = await fetch(fullUrl.toString(), {
+    credentials: 'include',
+    ...options
+  })
 
   if (!res.ok) {
     throw res

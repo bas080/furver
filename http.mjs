@@ -5,7 +5,7 @@ import schema from './schema.mjs'
 import fs from 'node:fs'
 import { URL } from 'node:url'
 
-const debug = _debug.extend('server')
+const debug = _debug.extend('http')
 const mustDebug = debug.extend('start')
 
 async function httpServer (api, port) {
