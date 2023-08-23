@@ -200,9 +200,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1690147889418, '1.1.0' ]
-[ 'hello world', 1690147889426, '1.1.0' ]
-[ 'hello world', 1690147889430, '1.1.0' ]
+[ 'hello world', 1692794757037, '1.2.0' ]
+[ 'hello world', 1692794757043, '1.2.0' ]
+[ 'hello world', 1692794757047, '1.2.0' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
@@ -259,11 +259,11 @@ furver --help
 furver <command>
 
 Commands:
-  furver server <modules..>                 start server
-  furver repl <modules..>                   start a repl without server
-  furver client [port|url]                  start client repl
-  furver schema                             print schema of api
-  [modules..]|[--port]|[--url]
+  furver server <modules..>  start server
+  furver repl [modules..]    start a local server or client repl
+  furver client              start client repl. Use repl --url instead
+                                                                    [deprecated]
+  furver schema [modules..]  print schema of api
 
 Options:
       --help     Show help                                             [boolean]

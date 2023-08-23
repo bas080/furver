@@ -4,8 +4,8 @@
 
 - [Import](#import)
 - [Reference](#reference)
-  * [`server(object)(request, response, lispProgram)`](#serverobjectrequest-response-lispprogram)
-  * [`withConfig](#withconfig)
+  * [server](#server)
+  * [withConfig](#withconfig)
     + [option.onResponse](#optiononresponse)
     + [option.onRequest](#optiononrequest)
     + [option.onError](#optiononerror)
@@ -37,12 +37,18 @@ import {
 
 ## Reference
 
-### `server(object)(request, response, lispProgram)`
+### server
 
 A function that takes an object which could be the module export or any object.
 It then returns a function which is called on request.
 
-### `withConfig
+```js
+// A pseudo express implementation.
+route.get(async (request, response) =>
+  await server(object)(request, response, req.params.body))
+```
+
+### withConfig
 
 The `withConfig` function is completely optional and used to define behavior
 that is performed on every request, response or error. Simply wrap the exported

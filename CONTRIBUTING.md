@@ -45,10 +45,10 @@ npm t -- -R classic
 ```
 ```
 
-> furver@1.1.0 test
+> furver@1.2.0 test
 > tap -j 1 *.test.mjs --no-cov -R classic
 
-cli.test.mjs .......................................... 4/4 2s
+cli.test.mjs .......................................... 4/4 5s
 client.test.mjs ..................................... 16/16
 curry.test.mjs ........................................ 4/4
 debounce.test.mjs ..................................... 3/3
@@ -57,7 +57,7 @@ lisp.test.mjs ....................................... 14/14
 promises.test.mjs ................................... 10/10
 total ............................................... 61/61
 
-  61 passing (5s)
+  61 passing (8s)
 
   ok
 ```
@@ -87,17 +87,12 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 402 packages in 7s
+added 32 packages, removed 1 package, and audited 404 packages in 4s
 
-38 packages are looking for funding
+39 packages are looking for funding
   run `npm fund` for details
 
-1 moderate severity vulnerability
-
-To address all issues, run:
-  npm audit fix
-
-Run `npm audit` for details.
+found 0 vulnerabilities
 ```
 
 ## Documentation
