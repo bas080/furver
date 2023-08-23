@@ -51,7 +51,32 @@ const argv = yargs(hideBin(process.argv))
   .command('server <modules..>', 'start server', noop, async ({ modules, port }) => {
     serve(modules, port)
   })
-  .command('repl <modules..>', 'start a repl without server', noop, async ({ modules }) => {
+  .command('repl [modules..]', 'start a local server or client repl', noop, async ({ url, modules }) => {
+    if (url) {
+      const { default: repl } = await import('./repl.mjs')
+      const { default: FurverClient } = await import('./client.mjs')
+
+      const api = await FurverClient({ endpoint: url })
+
+      Object.keys(api).forEach(key => {
+        if (!global[key]) global[key] = api[key]
+      })
+
+      repl(async function awaitEval (cmd, context, filename, callback) {
+        const value = eval(cmd) // eslint-disable-line
+
+        if (isPromise(value)) { return callback(null, await value) }
+
+        callback(null, await api.call(value))
+      })
+
+      return
+    }
+
+    if (!modules) {
+      throw new Error('No --url or modules.. defined.\nEither define modules or a --url connection string.')
+    }
+
     const { default: repl } = await import('./repl.mjs')
     const { exec } = await import('./lisp.mjs')
 
@@ -73,34 +98,34 @@ const argv = yargs(hideBin(process.argv))
       callback(null, await exec(modules, value))
     })
   })
-  .command(['client [port|url]'], 'start client repl', noop, async ({ endpoint, port, url }) => {
-    const { default: repl } = await import('./repl.mjs')
-    const { default: FurverClient } = await import('./client.mjs')
 
-    const api = await FurverClient({ endpoint })
-
-    Object.keys(api).forEach(key => {
-      if (!global[key]) global[key] = api[key]
-    })
-
-    repl(async function awaitEval (cmd, context, filename, callback) {
-      const value = eval(cmd) // eslint-disable-line
-
-      if (isPromise(value)) { return callback(null, await value) }
-
-      callback(null, await api.call(value))
-    })
+  .command({
+    command: 'client',
+    describe: 'start client repl. Use repl --url instead',
+    deprecated: true,
+    hidden: true,
+    handler: () => {
+      // Handle the deprecated subcommand here
+      console.log('Use the "repl" subcommand')
+      process.exit(1)
+    }
   })
-  .command('schema [modules..]|[--port]|[--url]', 'print schema of api', noop, async ({ endpoint, modules, port, url }) => {
+
+  .command('schema [modules..]', 'print schema of api', noop, async ({ modules, url }) => {
     if (modules) {
       const { default: schema } = await import('./schema.mjs')
       console.log(JSON.stringify(schema(modules)))
-    } else {
-      const { default: FurverClient, schema } = await import('./client.mjs')
-      const api = await FurverClient({ endpoint })
-
-      return console.log(JSON.stringify(await schema(api)))
+      return
     }
+
+    if (!url) {
+      throw new Error('No --url or modules.. defined.\nEither define modules or a --url connection string.')
+    }
+
+    const { default: FurverClient, schema } = await import('./client.mjs')
+    const api = await FurverClient({ endpoint: url })
+
+    return console.log(JSON.stringify(await schema(api)))
   })
   .option('url', {
     type: 'string',
@@ -133,13 +158,6 @@ const argv = yargs(hideBin(process.argv))
     check (x) {
       return isNaN(Number(x))
     }
-  })
-  .middleware((argv) => {
-    const { port, url } = argv
-
-    argv.endpoint = (isNaN(Number(port)))
-      ? url
-      : `http://localhost:${port}`
   })
   .parse()
 
