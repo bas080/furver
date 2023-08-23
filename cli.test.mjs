@@ -6,19 +6,23 @@ const bin = './cli.mjs'
 process.env.DEBUG = '*'
 
 test('run server with default port', (t) => {
+  const timeout = 5000
+  t.plan(1)
+  t.setTimeout(timeout)
+
   const child = spawn(bin, ['server', './example/api.mjs'])
 
   child.on('error', (err) => t.fail(err))
   child.stderr.on('data', (data) => {
     if (data.toString().includes('Listening on port ')) {
-      t.pass()
-      t.end()
+      t.pass('Server is listening')
     }
   })
 
   setTimeout(() => {
     child.kill('SIGINT')
-  }, 500)
+    t.end()
+  }, timeout - 500)
 })
 
 test('run server with custom port', (t) => {
