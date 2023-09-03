@@ -171,7 +171,7 @@ This client is compatible with the browser and Node.js.
 You can also start talking with a Furver server using the cli.
 
 ```bash
-furver client --port 3000
+furver repl --url http://localhost:3000
 ```
 
 This will start a prompt that takes valid JavaScript or a Lisp expression.
