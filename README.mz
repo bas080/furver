@@ -1,5 +1,8 @@
 # Furver
 
+[DEPRECATED: I HAVE STARTED A NEW PROJECT NAMED SendScript. It is a much
+simpler package with a more expressive dsl for client usage.][sendscript]
+
 Furver is a minimal RPC solution that uses JSON and Node.js. Turn any
 JavaScript module into a simple to use client API that is easy to learn
 while also expressive enough for advanced use-cases.
@@ -226,3 +229,5 @@ started quicker.
 ## License
 
 See the [LICENSE.txt](./LICENSE.txt) file for details.
+
+[sendscript]:https://github.com/bas080/sendscript
