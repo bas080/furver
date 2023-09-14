@@ -13,8 +13,8 @@ bash --version | head -n 1 # For usage examples
 curl --version | head -n 1 | cut -f -2 -d ' '
 ```
 ```
-9.7.2
-v20.4.0
+9.8.0
+v20.5.1
 GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)
 curl 7.68.0
 ```
@@ -45,7 +45,7 @@ npm t -- -R classic
 ```
 ```
 
-> furver@1.2.0 test
+> furver@1.2.1 test
 > tap -j 1 *.test.mjs --no-cov -R classic
 
 cli.test.mjs .......................................... 4/4 5s
@@ -57,7 +57,7 @@ lisp.test.mjs ....................................... 14/14
 promises.test.mjs ................................... 10/10
 total ............................................... 61/61
 
-  61 passing (8s)
+  61 passing (7s)
 
   ok
 ```
@@ -87,7 +87,7 @@ git add ./client.min.js
 ```
 ```
 
-added 32 packages, removed 1 package, and audited 404 packages in 4s
+added 32 packages, removed 22 packages, and audited 404 packages in 6s
 
 39 packages are looking for funding
   run `npm fund` for details

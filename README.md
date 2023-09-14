@@ -1,12 +1,14 @@
 # Furver
 
+[DEPRECATED: I HAVE STARTED A NEW PROJECT NAMED SendScript. It is a much
+simpler package with a more expressive dsl for client usage.][sendscript]
+
 Furver is a minimal RPC solution that uses JSON and Node.js. Turn any
 JavaScript module into a simple to use client API that is easy to learn
 while also expressive enough for advanced use-cases.
 
 [![NPM](https://img.shields.io/npm/v/furver?color=blue&style=flat-square)](https://www.npmjs.com/package/furver)
 [![NPM Downloads](https://img.shields.io/npm/dm/furver?style=flat-square)](https://www.npmjs.com/package/furver)
-[![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/furver?style=flat-square)](https://snyk.io/vuln/npm:furver)
 [![Standard Code Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)
 [![License](https://img.shields.io/npm/l/furver?color=brightgreen&style=flat-square)](./LICENSE)
 
@@ -200,9 +202,9 @@ Here an working example of the JavaScript client.
 })()
 ```
 ```javascript
-[ 'hello world', 1692794757037, '1.2.0' ]
-[ 'hello world', 1692794757043, '1.2.0' ]
-[ 'hello world', 1692794757047, '1.2.0' ]
+[ 'hello world', 1694650272974, '1.2.1' ]
+[ 'hello world', 1694650272979, '1.2.1' ]
+[ 'hello world', 1694650272982, '1.2.1' ]
 ```
 
 All three ways are equivalent and valid ways of writing a furver Lisp program
@@ -215,7 +217,7 @@ This client is compatible with the browser and Node.js.
 You can also start talking with a Furver server using the cli.
 
 ```bash
-furver client --port 3000
+furver repl --url http://localhost:3000
 ```
 
 This will start a prompt that takes valid JavaScript or a Lisp expression.
@@ -288,3 +290,5 @@ started quicker.
 ## License
 
 See the [LICENSE.txt](./LICENSE.txt) file for details.
+
+[sendscript]:https://github.com/bas080/sendscript
